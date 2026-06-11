@@ -719,45 +719,51 @@ function calcCapitalActual(){
 
 
 function calcRetornoAnualizado() {
-  // Calcula retorno anualizado real da carteira completa (ETFs + Ações)
+  // Calcula retorno anualizado real — só ETFs com preços reais carregados
   var totalInvest = 0, totalActual = 0;
   var primeiraData = new Date('2025-01-01');
   var hoje = new Date();
+  var temPrecos = false;
 
-  // ETFs
+  // ETFs — só considera se tem preço real do Yahoo (não usa precoCompra como fallback)
   carteira.forEach(function(e){
+    if(!precos[e.ticker]) return; // ignorar sem preço real
     var invest = e.qtd * e.precoCompra;
-    var actual = e.qtd * (precos[e.ticker] || e.precoCompra);
+    var actual = e.qtd * precos[e.ticker];
+    if(invest <= 0) return;
     totalInvest += invest;
     totalActual += actual;
-    // Usar data mais antiga como base
+    temPrecos = true;
     if(e.data){ var d=new Date(e.data); if(d<primeiraData) primeiraData=d; }
   });
 
-  // Ações
+  // Ações USD — converter para EUR aproximado (taxa ~0.92)
+  var taxaUSDEUR = 0.92;
   if(typeof STOCKS_DEFAULT_POS !== 'undefined'){
     Object.entries(STOCKS_DEFAULT_POS).forEach(function([tk,p]){
-      var invest = p.qtd * p.preco;
-      var actual = p.qtd * (precos[tk] || p.preco);
+      if(!precos[tk]) return; // só com preço real
+      var invest = p.qtd * p.preco * taxaUSDEUR;
+      var actual = p.qtd * precos[tk] * taxaUSDEUR;
+      if(invest <= 0) return;
       totalInvest += invest;
       totalActual += actual;
+      temPrecos = true;
     });
   }
 
-  if(totalInvest <= 0) return fireParams.retorno || 8;
+  // Se não há preços reais carregados, usar valor de referência
+  if(!temPrecos || totalInvest <= 0) return fireParams.retorno || 8;
 
   // Anos desde primeira compra
   var anos = (hoje - primeiraData) / (1000*60*60*24*365.25);
-  if(anos < 0.1) return fireParams.retorno || 8;
+  if(anos < 0.08) return fireParams.retorno || 8; // menos de 1 mês
 
-  // Retorno total
+  // Retorno total e anualizado
   var retTotal = (totalActual - totalInvest) / totalInvest;
-
-  // Anualizar
   var retAnual = (Math.pow(1 + retTotal, 1/anos) - 1) * 100;
 
-  // Limitar a valores razoáveis
-  return Math.min(Math.max(retAnual, -20), 50);
+  // Limitar a valores razoáveis (-30% a +60%)
+  return Math.min(Math.max(retAnual, -30), 60);
 }
 
 function calcDCAReal(){
@@ -1201,10 +1207,14 @@ function renderFIRE() {
     </div>
     <div class="fire-param">
       <label>Retorno Anual <span style="color:var(--green);font-size:10px">● auto</span></label>
-      <input type="number" value="${retornoAuto.toFixed(1)}" style="color:var(--green);border-color:var(--green)" readonly>
+      ${retornoAuto !== (fireParams.retorno||8) ?
+        `<input type="number" value="${retornoAuto.toFixed(1)}" style="color:var(--green);border-color:var(--green)" readonly>
+         <div style="font-size:10px;margin-top:4px;color:var(--green)">✓ Calculado pela tua carteira real</div>` :
+        `<input type="number" value="" placeholder="A calcular..." style="color:var(--silver);border-color:var(--mid)" readonly>
+         <div style="font-size:10px;margin-top:4px;color:var(--silver)">⏳ A aguardar preços reais...</div>`
+      }
       <div style="font-size:10px;margin-top:4px;color:var(--silver)">
-        Calculado pela carteira real · Referência: ${p.retorno}%
-        <span style="cursor:pointer;color:var(--teal)" onclick="toggleRetornoManual()" title="Editar manualmente">✏️</span>
+        <span style="cursor:pointer;color:var(--teal)" onclick="toggleRetornoManual()" title="Definir manualmente">✏️ Definir manualmente</span>
       </div>
       <input type="number" id="retornoManualInput" value="${p.retorno}" min="1" max="20"
         style="display:none;margin-top:4px;width:80px"
@@ -1225,7 +1235,7 @@ function renderFIRE() {
 
   // Usar capital auto no cálculo
   var capitalCalc = capitalAuto > 0 ? capitalAuto : p.capital;
-  var retornoCalc = retornoAuto !== 0 ? retornoAuto : p.retorno;
+  var retornoCalc = (retornoAuto !== (fireParams.retorno||8) && retornoAuto !== 0) ? retornoAuto : p.retorno;
   const capitalFinal = calcFire(capitalCalc, p.dca, anosReforma, retornoCalc);
   const capitalNec = (p.objDiv/(1-p.irs/100))/(p.yield/100/12);
   const divBruto = capitalFinal*(p.yield/100)/12;
@@ -1435,32 +1445,47 @@ function renderCharts() {
       scales:{x:{ticks:{color:'#CDD8E3',font:{size:9}},grid:{color:'#263758'}},y:{ticks:{color:'#CDD8E3',font:{size:9},callback:function(v){return'€'+Math.round(v/1000)+'K';}},grid:{color:'#263758'}}}}
   });
 
-  // Gráfico 3: Ganho/Perda % dos meus ETFs e ações
+  // Gráfico 3: Ganho/Perda % — só com preços reais carregados
   destroyChart('ai');
   var gpLabels = [];
   var gpData = [];
   var gpColors = [];
+  // ETFs — só com preço real
   carteira.forEach(function(e){
+    if(!precos[e.ticker]) return;
     var invest = e.qtd * e.precoCompra;
-    var actual = e.qtd * (precos[e.ticker] || e.precoCompra);
-    if(invest > 0){
-      var pct = (actual-invest)/invest*100;
-      gpLabels.push(e.ticker);
-      gpData.push(parseFloat(pct.toFixed(1)));
-      gpColors.push(pct >= 0 ? '#06D6A0' : '#EF233C');
-    }
+    if(invest <= 0) return;
+    var actual = e.qtd * precos[e.ticker];
+    var pct = (actual-invest)/invest*100;
+    gpLabels.push(e.ticker);
+    gpData.push(parseFloat(pct.toFixed(1)));
+    gpColors.push(pct >= 0 ? '#06D6A0' : '#EF233C');
   });
+  // Ações — só com preço real
   if(typeof STOCKS_DEFAULT_POS!=='undefined'){
     Object.entries(STOCKS_DEFAULT_POS).forEach(function([tk,p]){
+      if(!precos[tk]) return;
       var invest = p.qtd*p.preco;
-      var actual = p.qtd*(precos[tk]||p.preco);
-      if(invest>0){
-        var pct=(actual-invest)/invest*100;
-        gpLabels.push(tk);
-        gpData.push(parseFloat(pct.toFixed(1)));
-        gpColors.push(pct>=0?'#06D6A0':'#EF233C');
-      }
+      if(invest<=0) return;
+      var actual = p.qtd*precos[tk];
+      var pct=(actual-invest)/invest*100;
+      gpLabels.push(tk);
+      gpData.push(parseFloat(pct.toFixed(1)));
+      gpColors.push(pct>=0?'#06D6A0':'#EF233C');
     });
+  }
+  // Se sem preços ainda, mostrar mensagem
+  if(gpLabels.length===0){
+    var ctxAI2=document.getElementById('chartAI');
+    if(ctxAI2){
+      var ctx2d=ctxAI2.getContext('2d');
+      ctx2d.clearRect(0,0,ctxAI2.width,ctxAI2.height);
+      ctx2d.fillStyle='#4a5878';
+      ctx2d.font='13px sans-serif';
+      ctx2d.textAlign='center';
+      ctx2d.fillText('A aguardar preços... (~15 segundos)',ctxAI2.width/2,ctxAI2.height/2);
+    }
+    return;
   }
   var ctxAI = document.getElementById('chartAI');
   if(ctxAI && gpLabels.length > 0) charts['ai'] = new Chart(ctxAI, {
