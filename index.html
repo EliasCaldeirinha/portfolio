@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0e1f18">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FIRE EC">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQyIiBmaWxsPSIjMGUxZjE4Ii8+PGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iNzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJkZDRhNyIgc3Ryb2tlLXdpZHRoPSI2Ii8+PHRleHQgeD0iOTYiIHk9IjExOCIgZm9udC1mYW1pbHk9IlNlZ29lIFVJLEFyaWFsIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMmRkNGE3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5FQzwvdGV4dD48dGV4dCB4PSI5NiIgeT0iMTUyIiBmb250LWZhbWlseT0iU2Vnb2UgVUksQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiM5ZGI4YWMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZJUkU8L3RleHQ+PC9zdmc+">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQyIiBmaWxsPSIjMGUxZjE4Ii8+PGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iNzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJkZDRhNyIgc3Ryb2tlLXdpZHRoPSI2Ii8+PHRleHQgeD0iOTYiIHk9IjExOCIgZm9udC1mYW1pbHk9IlNlZ29lIFVJLEFyaWFsIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMmRkNGE3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5FQzwvdGV4dD48dGV4dCB4PSI5NiIgeT0iMTUyIiBmb250LWZhbWlseT0iU2Vnb2UgVUksQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiM5ZGI4YWMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZJUkU8L3RleHQ+PC9zdmc+">
 <title>UCITS ETF FIRE Dashboard</title>
 <script>
 // ── Autenticação ──────────────────────────────────────────
@@ -310,7 +318,6 @@ tbody td { padding: 9px 12px; vertical-align: middle; }
   <button class="nav-btn" onclick="showSection('rejeitados',this)">🚫 Rejeitados</button>
   <button class="nav-btn" onclick="showSection('acoes',this)">📈 Ações</button>
   <button class="nav-btn" onclick="showSection('calendario',this)">📅 Dividendos</button>
-  <button class="nav-btn" onclick="showSection('scramble',this)">🏦 Scramble / P2P</button>
 </div>
 
 <div class="main">
@@ -367,33 +374,9 @@ tbody td { padding: 9px 12px; vertical-align: middle; }
 <!-- ══ MINHA CARTEIRA ═════════════════════════════════════════ -->
 <div id="carteira" class="section">
   <div class="section-title">📋 Minha Carteira</div>
-  <div class="kpi-grid" id="carteiraResumo" style="margin-bottom:16px"></div>
-  <div style="margin-bottom:16px;text-align:right"><button class="btn" onclick="carregarCarteiraXTB()" style="padding:8px 16px;font-size:13px;background:var(--green);color:var(--navy);font-weight:700">⬇ Importar carteira real da XTB (19 lotes · 3 contas)</button></div>
-
-  <div class="chart-card" style="margin-bottom:20px">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
-      <div class="chart-title" style="margin-bottom:0">📈 Rentabilidade acumulada dos meus ETFs</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-        <span style="display:inline-flex;border:1px solid var(--mid);border-radius:8px;overflow:hidden">
-          <button data-evolmode="eur" onclick="setEvolMode('eur')" style="padding:4px 10px;font-size:12px;background:var(--ghost);color:var(--white);border:none;cursor:pointer">€1.000</button>
-          <button data-evolmode="pct" onclick="setEvolMode('pct')" style="padding:4px 10px;font-size:12px;background:var(--ghost);color:var(--white);border:none;cursor:pointer">%</button>
-        </span>
-        <button class="btn" data-evolrange="ytd" onclick="renderEvolucaoETFs('ytd')" style="padding:4px 9px;font-size:12px;background:var(--ghost);color:var(--white)">YTD</button>
-        <button class="btn" data-evolrange="1y" onclick="renderEvolucaoETFs('1y')" style="padding:4px 9px;font-size:12px;background:var(--ghost);color:var(--white)">1A</button>
-        <button class="btn" data-evolrange="3y" onclick="renderEvolucaoETFs('3y')" style="padding:4px 9px;font-size:12px;background:var(--ghost);color:var(--white)">3A</button>
-        <button class="btn" data-evolrange="5y" onclick="renderEvolucaoETFs('5y')" style="padding:4px 9px;font-size:12px;background:var(--ghost);color:var(--white)">5A</button>
-        <button class="btn" data-evolrange="max" onclick="renderEvolucaoETFs('max')" style="padding:4px 9px;font-size:12px;background:var(--ghost);color:var(--white)">Máx</button>
-      </div>
-    </div>
-    <div style="font-size:11px;color:var(--silver);margin-bottom:10px">Investimento simulado de €1.000 no início do período (todos os ETFs partem do mesmo ponto). ⚠ Mede o desempenho de mercado do ETF na janela — <strong>não</strong> o teu ganho/perda desde o preço a que compraste (esse está na tabela abaixo e no Ganho/Perda do Dashboard).</div>
-    <div style="height:300px"><canvas id="chartEvolucao"></canvas></div>
-    <div id="evolStatus" style="font-size:11px;color:var(--silver);margin-top:8px">Abre esta secção para carregar.</div>
-    <div class="kpi-grid" id="evolCards" style="margin-top:14px"></div>
-  </div>
   <div style="display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--ghost)">
     <button id="ctab-etf" onclick="switchCarteiraTab('etf')" style="padding:10px 22px;background:var(--teal);color:var(--navy);border:none;cursor:pointer;font-weight:700;font-size:13px;border-radius:8px 8px 0 0;margin-right:4px">📊 ETFs</button>
     <button id="ctab-stock" onclick="switchCarteiraTab('stock')" style="padding:10px 22px;background:var(--ghost);color:var(--silver);border:none;cursor:pointer;font-weight:600;font-size:13px;border-radius:8px 8px 0 0">📈 Ações</button>
-    <button id="ctab-p2p" onclick="switchCarteiraTab('p2p')" style="padding:10px 22px;background:var(--ghost);color:var(--silver);border:none;cursor:pointer;font-weight:600;font-size:13px;border-radius:8px 8px 0 0;margin-left:4px">🏦 P2P</button>
   </div>
   <div id="carteira-etf-panel">
   <div class="alert alert-info">💡 Preços actualizados automaticamente. Preenche Ticker, Perfil, Data, Qtd. e Preço de Compra — o resto calcula sozinho.</div>
@@ -477,18 +460,6 @@ tbody td { padding: 9px 12px; vertical-align: middle; }
     <div id="stockCarteiraFire" style="font-size:13px;color:var(--silver)">Introduz quantidades e preços acima.</div>
   </div>
   </div><!-- /carteira-stock-panel -->
-
-  <div id="carteira-p2p-panel" style="display:none">
-  <div class="alert alert-info">🏦 Investimento P2P (Scramble). Soma ao Património Total junto com ETFs e Ações. Detalhe completo, movimentos e fiscal na secção <strong>Scramble / P2P</strong> do menu.</div>
-  <div class="kpi-grid" id="cartP2PKpis"></div>
-  <div class="table-wrap" style="margin-top:14px">
-    <table>
-      <thead><tr><th>Data</th><th>Tipo</th><th style="text-align:right">Valor</th></tr></thead>
-      <tbody id="cartP2PBody"></tbody>
-    </table>
-  </div>
-  <div style="text-align:center;margin-top:14px"><button class="btn btn-primary" onclick="showSection('scramble',document.querySelector('[onclick*=scramble]'))">Abrir secção Scramble / P2P →</button></div>
-  </div><!-- /carteira-p2p-panel -->
 </div>
 
 <!-- ══ BIBLIOTECA ══════════════════════════════════════════════ -->
@@ -517,29 +488,6 @@ tbody td { padding: 9px 12px; vertical-align: middle; }
     <button id="btab-stock" onclick="switchBibTab('stock')" style="padding:10px 22px;background:var(--ghost);color:var(--silver);border:none;cursor:pointer;font-weight:600;font-size:13px;border-radius:8px 8px 0 0">📈 Ações</button>
   </div>
   <div id="bib-etf-panel">
-  <div class="chart-card" style="margin-bottom:16px;border-left:3px solid var(--amber)">
-    <div class="chart-title">📈 Comparar evolução: candidato vs o que detenho</div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
-      <select id="cmpLib" onchange="onCmpLibChange()" style="background:var(--ghost);border:1px solid var(--mid);color:var(--white);padding:8px 12px;border-radius:8px;font-size:13px;max-width:260px"></select>
-      <span style="color:var(--silver);font-size:12px">vs</span>
-      <select id="cmpHeld" style="background:var(--ghost);border:1px solid var(--mid);color:var(--white);padding:8px 12px;border-radius:8px;font-size:13px;max-width:260px"></select>
-      <button class="btn btn-primary" onclick="renderComparacao()" style="padding:6px 14px;font-size:13px">Comparar</button>
-      <span style="display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;align-items:center">
-        <span style="display:inline-flex;border:1px solid var(--mid);border-radius:8px;overflow:hidden">
-          <button data-cmpmode="eur" onclick="setCmpMode('eur')" style="padding:4px 10px;font-size:12px;background:var(--ghost);color:var(--white);border:none;cursor:pointer">€1.000</button>
-          <button data-cmpmode="pct" onclick="setCmpMode('pct')" style="padding:4px 10px;font-size:12px;background:var(--ghost);color:var(--white);border:none;cursor:pointer">%</button>
-        </span>
-        <button class="btn" data-cmprange="ytd" onclick="renderComparacao('ytd')" style="padding:4px 9px;font-size:12px;background:var(--ghost);color:var(--white)">YTD</button>
-        <button class="btn" data-cmprange="1y" onclick="renderComparacao('1y')" style="padding:4px 9px;font-size:12px;background:var(--ghost);color:var(--white)">1A</button>
-        <button class="btn" data-cmprange="3y" onclick="renderComparacao('3y')" style="padding:4px 9px;font-size:12px;background:var(--ghost);color:var(--white)">3A</button>
-        <button class="btn" data-cmprange="5y" onclick="renderComparacao('5y')" style="padding:4px 9px;font-size:12px;background:var(--ghost);color:var(--white)">5A</button>
-        <button class="btn" data-cmprange="max" onclick="renderComparacao('max')" style="padding:4px 9px;font-size:12px;background:var(--ghost);color:var(--white)">Máx</button>
-      </span>
-    </div>
-    <div style="height:280px"><canvas id="chartCompara"></canvas></div>
-    <div id="cmpStatus" style="font-size:11px;color:var(--silver);margin-top:8px">O candidato sugere automaticamente o ETF mais parecido que deténs (por setor/perfil). Carrega "Comparar".</div>
-    <div id="cmpVerdict"></div>
-  </div>
   <div class="alert alert-info" style="margin-bottom:12px">💡 Esta biblioteca contém <strong>todos os ETFs analisados</strong> (39 no total) — incluindo os que não tens em carteira. Usa como referência para novas compras. Os que tens em carteira têm peso > 0.</div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center">
     <input type="text" id="bibSearch" placeholder="Filtrar por ticker, nome ou setor..." style="background:var(--ghost);border:1px solid var(--mid);color:var(--white);padding:8px 12px;border-radius:8px;font-size:13px;width:240px" oninput="filterBib()">
@@ -711,7 +659,8 @@ const ETFS = [
   {t:"WTAI",n:"WisdomTree AI UCITS",s:"IA & Big Data",g:"C",ter:0.40,sent:"Positiva",r6:25,r12:35,r24:60,ai:95,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:4,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BDVPNG13"},
   {t:"RBOT",n:"iShares Automation & Robotics",s:"Robótica & Auto.",g:"C",ter:0.40,sent:"Positiva",r6:20,r12:30,r24:55,ai:91,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BYZK4552"},
   {t:"ISPY",n:"L&G Cyber Security",s:"Cibersegurança",g:"C",ter:0.69,sent:"Positiva",r6:24,r12:35,r24:58,ai:92,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:4,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BYPLS672"},
-  {t:"EUDF",n:"WisdomTree Europe Defence",s:"Defesa",g:"C",ter:0.41,sent:"Positiva",r6:35,r12:45,r24:80,ai:94,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:4,url:"https://www.justetf.com/en/etf-profile.html?isin=IE0002Y8CX98"},
+  {t:"EUDF",n:"WisdomTree Europe Defence",s:"Defesa",g:"C",ter:0.41,sent:"Positiva",r6:35,r12:45,r24:80,ai:94,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:4,url:"https://www.justetf.com/en/etf-profile.html?isin=IE0002Y9QT36"},
+  {t:"DFEN",n:"iShares Global Aerospace & Defence",s:"Defesa",g:"C",ter:0.35,sent:"Positiva",r6:28,r12:38,r24:65,ai:92,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:2,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BMW3QW58"},
   {t:"XDWH",n:"Xtrackers MSCI World Health Care",s:"Saúde & Biotech",g:"G",ter:0.25,sent:"Neutra",r6:15,r12:20,r24:35,ai:84,risco:"Moderado",rep:"Física",perfil:"Temáticos",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BM67HN09"},
   {t:"JEDI",n:"VanEck Space Innovators",s:"Espaço",g:"C",ter:0.55,sent:"Positiva",r6:45,r12:86,r24:120,ai:94,risco:"Muito Elevado",rep:"Física",perfil:"Temáticos",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE000YU9K6K2"},
   {t:"STAR",n:"iShares Space Technologies UCITS ETF",s:"Espaço / Satélites / Drones",g:"C",ter:0.50,sent:"Positiva",r6:0,r12:0,r24:0,ai:85,risco:"Muito Elevado",rep:"Física",perfil:"Temáticos",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=IE000A9G9R73"},
@@ -783,7 +732,7 @@ function calcCapitalActual(){
       stockVal += pos.qtd * p;
     });
   }
-  return etfVal + stockVal + (typeof scrambleValorAtual==='function'?scrambleValorAtual():0);
+  return etfVal + stockVal;
 }
 
 
@@ -966,9 +915,7 @@ function showSection(id, btn) {
   if(id==='calendario') renderCalendario();
   if(id==='acoes'){ renderAcoesKpis(); renderStockCards(); renderStockFire(); renderStockTable(); }
   if(id==='carteira') renderStockCarteiraPanel();
-  if(id==='biblioteca'){ renderBiblioteca(); filterStockBib(); if(typeof populateCompara==='function') populateCompara(); }
-  if(id==='scramble') renderScramble();
-  if(id==='carteira' && typeof renderEvolucaoETFs==='function') renderEvolucaoETFs();
+  if(id==='biblioteca'){ renderBiblioteca(); filterStockBib(); }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -998,29 +945,18 @@ function renderKPIs() {
   }
   var gp = (totalActual+stockActual) - (totalInvest+stockInvest);
   var gpPct = (totalInvest+stockInvest) > 0 ? gp/(totalInvest+stockInvest)*100 : 0;
-  // P2P / Scramble (sleeve alternativo)
-  var scrInv = (typeof scrambleCusto==='function')?scrambleCusto():0;
-  var scrVal = (typeof scrambleValorAtual==='function')?scrambleValorAtual():0;
-  var invTot = totalInvest+stockInvest+scrInv;
-  var valTot = totalActual+stockActual+scrVal;
-  gp = valTot - invTot;
-  gpPct = invTot > 0 ? gp/invTot*100 : 0;
   var anos = fireParams.reforma - calcIdadeActual();
   var r = fireParams.retorno/100/12;
   var n = anos * 12;
-  var capBase = (typeof calcCapitalActual==='function' && calcCapitalActual()>0) ? calcCapitalActual() : fireParams.capital;
-  var capitalFinal = capBase*(1+r)**n + fireParams.dca*((1+r)**n-1)/r;
+  var capitalFinal = fireParams.capital*(1+r)**n + fireParams.dca*((1+r)**n-1)/r;
   var divLiq = capitalFinal * (fireParams.yield/100) / 12 * (1 - fireParams.irs/100);
-  var scrJuros = (typeof scrambleTotais==='function')?scrambleTotais().juros:0;
-  var scrGanho = (typeof scrambleTotais==='function')?scrambleTotais().ganho:0;
 
   var kpis = [
-    {l:"Capital Investido",v:`€${(invTot).toLocaleString('pt-PT',{maximumFractionDigits:0})}`,s:`ETFs + Ações + P2P`,c:"var(--teal)"},
-    {l:"Valor Actual",v:`€${(valTot).toLocaleString('pt-PT',{maximumFractionDigits:0})}`,s:"ETFs + Ações + P2P",c:"var(--green)"},
+    {l:"Capital Investido",v:`€${(totalInvest+stockInvest).toLocaleString('pt-PT',{maximumFractionDigits:0})}`,s:`ETFs + Ações`,c:"var(--teal)"},
+    {l:"Valor Actual",v:`€${(totalActual+stockActual).toLocaleString('pt-PT',{maximumFractionDigits:0})}`,s:"Com lucros/perdas",c:"var(--green)"},
     {l:"Ganho/Perda",v:`${gp>=0?'+':''}€${Math.abs(gp).toLocaleString('pt-PT',{maximumFractionDigits:0})}`,s:`${gpPct>=0?'+':''}${gpPct.toFixed(1)}%`,c:gp>=0?"var(--green)":"var(--red)"},
     {l:"Capital FIRE est.",v:`€${Math.round(capitalFinal/1000)}K`,s:`Cenário ${fireParams.retorno}%/ano`,c:"var(--gold)"},
     {l:"Div. Líquido/mês",v:`€${Math.round(divLiq)}`,s:`Após IRS ${fireParams.irs}%`,c:"var(--amber)"},
-    {l:"Rendimentos P2P",v:`€${scrGanho.toFixed(2)}`,s:`Juros €${scrJuros.toFixed(2)} + bónus`,c:"var(--green)"},
     {l:"Anos para FIRE",v:(fireParams.reforma - calcIdadeActual()),s:"Idade actual: "+calcIdadeActual()+" anos",c:"var(--teal)"},
   ];
   var el = document.getElementById('kpiGrid');
@@ -1251,7 +1187,6 @@ function removeCompra(id) {
 }
 
 function renderCarteira() {
-  if(typeof renderCarteiraResumo==='function') renderCarteiraResumo();
   const body = document.getElementById('carteiraBody');
   if(!body) return;
   if (carteira.length === 0) {
@@ -1379,7 +1314,7 @@ function renderFIRE() {
     <div class="fire-param">
       <label>Capital Actual <span style="color:var(--green);font-size:10px">● auto</span></label>
       <input type="number" value="${Math.round(capitalAuto)}" style="color:var(--green);border-color:var(--green)" readonly>
-      <div style="font-size:10px;color:var(--silver);margin-top:4px">Valor real ETFs + Ações + P2P</div>
+      <div style="font-size:10px;color:var(--silver);margin-top:4px">Valor real ETFs + Ações</div>
     </div>
     <div class="fire-param">
       <label>DCA Planeado (€/mês)</label>
@@ -1428,10 +1363,6 @@ function renderFIRE() {
   const divLiq = divBruto*(1-p.irs/100);
   const gap = capitalFinal - capitalNec;
   const pctObj = capitalCalc/capitalNec*100;
-  // DCA mensal necessário para atingir o capital necessário (inverso de calcFire)
-  var _rM = retornoCalc/100/12, _nM = anosReforma*12;
-  var _fv = (Math.pow(1+_rM,_nM)-1)/_rM;
-  var dcaNec = Math.max(0, (capitalNec - capitalCalc*Math.pow(1+_rM,_nM)) / _fv);
 
   var resultsEl = document.getElementById('fireResults');
   if(!resultsEl) return;
@@ -1441,7 +1372,6 @@ function renderFIRE() {
     {l:"Dividendo Líquido/mês",v:`€${Math.round(divLiq).toLocaleString('pt-PT')}`,c:"var(--amber)"},
     {l:"Capital Necessário",v:`€${Math.round(capitalNec).toLocaleString('pt-PT')}`,c:"var(--silver)"},
     {l:"Gap / Excedente",v:`${gap>=0?'+':''}€${Math.round(Math.abs(gap)).toLocaleString('pt-PT')}`,c:gap>=0?"var(--green)":"var(--red)"},
-    {l:"DCA necessário p/ objectivo",v:`€${Math.round(dcaNec).toLocaleString('pt-PT')}/mês`,c:"var(--gold)"},
     {l:"Avaliação",v:gap>=0?"✅ Objectivo atingível":"⚠️ Aumentar DCA",c:gap>=0?"var(--green)":"var(--amber)"},
   ].map(k=>`<div class="fire-result"><div class="fire-result-label">${k.l}</div><div class="fire-result-value" style="color:${k.c}">${k.v}</div></div>`).join('')
   + `<div class="fire-result" style="grid-column:span 2">
@@ -1778,340 +1708,11 @@ function renderCharts() {
 // ═══════════════════════════════════════════════════════════════
 // EXPORT / IMPORT
 // ═══════════════════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════════════
-// SCRAMBLE / P2P — sleeve alternativo (registo, teto, fiscal)
-// ═══════════════════════════════════════════════════════════════
-var SCRAMBLE_DEFAULT=[
-  {d:"2025-05-05",t:"deposito",v:100},{d:"2025-05-19",t:"bonus",v:7.78},{d:"2025-05-19",t:"investido",v:-100},
-  {d:"2025-06-05",t:"principal",v:4.14},{d:"2025-07-07",t:"principal",v:4.14},{d:"2025-08-05",t:"principal",v:4.14},
-  {d:"2025-08-18",t:"investido",v:-20.1},{d:"2025-09-05",t:"principal",v:5.37},{d:"2025-10-06",t:"principal",v:5.37},
-  {d:"2025-11-05",t:"juros",v:4.28},{d:"2025-11-05",t:"principal",v:80.53},{d:"2025-11-17",t:"investido",v:-95.65},
-  {d:"2025-12-05",t:"principal",v:1.23},{d:"2026-01-05",t:"principal",v:1.23},{d:"2026-02-05",t:"principal",v:13.95},
-  {d:"2026-02-05",t:"juros",v:0.77},{d:"2026-02-17",t:"investido",v:-17.18},{d:"2026-05-05",t:"juros",v:8.61},
-  {d:"2026-05-05",t:"principal",v:95.65},{d:"2026-05-18",t:"investido",v:-104.25},{d:"2026-05-18",t:"deposito",v:1000},
-  {d:"2026-06-17",t:"investido",v:-1000},{d:"2026-06-17",t:"bonus",v:10}
-];
-var scrambleMovs, scrambleTeto;
-try{ var _sm=localStorage.getItem('fireScrambleMovs'); scrambleMovs=_sm?JSON.parse(_sm):SCRAMBLE_DEFAULT.slice(); }catch(e){ scrambleMovs=SCRAMBLE_DEFAULT.slice(); }
-try{ var _st=localStorage.getItem('fireScrambleTeto'); scrambleTeto=(_st!==null&&_st!=='')?parseFloat(_st):2000; }catch(e){ scrambleTeto=2000; }
-
-function saveScramble(){ try{ localStorage.setItem('fireScrambleMovs',JSON.stringify(scrambleMovs)); localStorage.setItem('fireScrambleTeto',String(scrambleTeto)); }catch(e){} }
-
-var SC_LABELS={deposito:'Depósito próprio',investido:'Investido (crédito)',principal:'Principal devolvido',juros:'Juros recebidos',bonus:'Bónus'};
-
-function scrambleTotais(){
-  var t={deposito:0,investido:0,principal:0,juros:0,bonus:0}, saldo=0;
-  scrambleMovs.forEach(function(m){ if(t[m.t]!==undefined) t[m.t]+=m.v; saldo+=m.v; });
-  return { dep:t.deposito, inv:-t.investido, principal:t.principal, juros:t.juros, bonus:t.bonus,
-           saldo:saldo, exposicao:(-t.investido)-t.principal, ganho:t.juros+t.bonus };
-}
-function scrambleAno(tipo,ano){ var s=0; scrambleMovs.forEach(function(m){ if(m.t===tipo && (m.d||'').slice(0,4)===String(ano)) s+=m.v; }); return s; }
-// Valor atual do sleeve = capital ainda empregue + saldo em caixa. Custo = depósitos próprios.
-function scrambleValorAtual(){ var x=scrambleTotais(); return x.exposicao + x.saldo; }
-function scrambleCusto(){ return scrambleTotais().dep; }
-// TIR anualizada (money-weighted / XIRR): depósitos próprios (datados) vs valor atual hoje.
-// Pondera cada euro pelo tempo investido — não fica distorcida por um depósito recente grande.
-function scrambleXIRR(){
-  var flows=[];
-  scrambleMovs.forEach(function(m){ if(m.t==='deposito' && m.v>0) flows.push({d:new Date(m.d), v:-m.v}); });
-  if(flows.length===0) return null;
-  var val=scrambleValorAtual();
-  if(val<=0) return null;
-  flows.push({d:new Date(), v:val});
-  flows.sort(function(a,b){ return a.d-b.d; });
-  var t0=flows[0].d;
-  var yrs=function(d){ return (d-t0)/(1000*60*60*24*365.25); };
-  var npv=function(r){ var s=0; flows.forEach(function(f){ s+=f.v/Math.pow(1+r, yrs(f.d)); }); return s; };
-  var lo=-0.9999, hi=10, flo=npv(lo), fhi=npv(hi);
-  if(!isFinite(flo)||!isFinite(fhi)||flo*fhi>0) return null;
-  for(var i=0;i<200;i++){ var mid=(lo+hi)/2, fm=npv(mid); if(Math.abs(fm)<1e-7) return mid; if(flo*fm<0){hi=mid;}else{lo=mid;flo=fm;} }
-  return (lo+hi)/2;
-}
-
-function renderScramble(){
-  var x=scrambleTotais();
-  var eur=function(n){ return '€'+n.toLocaleString('pt-PT',{minimumFractionDigits:2,maximumFractionDigits:2}); };
-  var xirr = scrambleXIRR();
-  var xirrTxt = (xirr!==null && isFinite(xirr)) ? ('+'+(xirr*100).toFixed(1)+'%') : '—';
-  var kpis=[
-    {l:'Depósitos próprios',v:eur(x.dep),c:'var(--white)'},
-    {l:'Capital empregue',v:eur(x.exposicao),c:'var(--amber)'},
-    {l:'Juros recebidos',v:eur(x.juros),c:'var(--green)'},
-    {l:'Bónus recebidos',v:eur(x.bonus),c:'var(--teal)'},
-    {l:'Ganho total (juros+bónus)',v:eur(x.ganho),c:'var(--green)'},
-    {l:'Saldo em caixa',v:eur(x.saldo),c:'var(--gold)'},
-    {l:'TIR anualizada',v:xirrTxt,c:'var(--green)',s:'money-weighted · rentabilidade real'}
-  ];
-  var ke=document.getElementById('scrambleKpis');
-  if(ke) ke.innerHTML=kpis.map(function(k){ return '<div class="kpi-card"><div class="kpi-label">'+k.l+'</div><div class="kpi-value" style="color:'+k.c+'">'+k.v+'</div>'+(k.s?'<div class="kpi-sub">'+k.s+'</div>':'')+'</div>'; }).join('');
-
-  // Composição do capital: próprio vs ganhos (reinvestidos a compor / em caixa)
-  var valTotal=x.exposicao+x.saldo;
-  var ganhosReinv=Math.max(0, x.exposicao - x.dep);   // ganhos já a trabalhar
-  var ganhosCaixa=Math.max(0, x.ganho - ganhosReinv); // ganhos ainda em caixa
-  var proprioCaixa=Math.max(0, x.saldo - ganhosCaixa); // capital próprio ainda em caixa (raro)
-  var comp=document.getElementById('scrambleComposicao');
-  if(comp){
-    var linha=function(lbl,val,cor,ind){ return '<div style="display:flex;justify-content:space-between;padding:4px 0'+(ind?';padding-left:16px':'')+'">'+
-      '<span style="font-size:'+(ind?'12':'13')+'px;color:'+(ind?'var(--silver)':'var(--white)')+'">'+lbl+'</span>'+
-      '<span style="font-size:'+(ind?'12':'13')+'px;font-weight:700;color:'+cor+'">'+eur(val)+'</span></div>'; };
-    comp.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:8px">💡 Composição do valor atual ('+eur(valTotal)+')</div>'+
-      linha('Capital próprio (depósitos)', x.dep, 'var(--white)')+
-      linha('Ganhos acumulados (juros + bónus)', x.ganho, 'var(--green)')+
-      linha('↳ reinvestidos — a compor', ganhosReinv, 'var(--teal)', true)+
-      linha('↳ em caixa — por reinvestir', ganhosCaixa, 'var(--gold)', true)+
-      (proprioCaixa>0.005?linha('↳ capital próprio em caixa', proprioCaixa, 'var(--silver)', true):'')+
-      '<div style="font-size:11px;color:var(--silver);margin-top:8px;border-top:1px solid var(--ghost);padding-top:8px">Os ganhos contam sempre como ganho, mesmo depois de reinvestidos. Reinvestir apenas move o valor de caixa para capital a trabalhar.</div>';
-  }
-
-  // Ponte: total investido acumulado -> valor atual (porque não é €1.337)
-  var bridge=document.getElementById('scrambleBridge');
-  if(bridge){
-    var bl=function(lbl,val,cor,op){ return '<div style="display:flex;justify-content:space-between;padding:4px 0">'+
-      '<span style="font-size:13px;color:var(--white)">'+(op?'<span style="color:var(--silver);display:inline-block;width:18px">'+op+'</span>':'<span style="display:inline-block;width:18px"></span>')+lbl+'</span>'+
-      '<span style="font-size:13px;font-weight:700;color:'+cor+'">'+eur(val)+'</span></div>'; };
-    bridge.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:8px">🔁 Porque é que não são €'+Math.round(x.inv)+'?</div>'+
-      bl('Total investido (acumulado, inclui reinvestimentos)', x.inv, 'var(--silver)')+
-      bl('Principal já reembolsado', x.principal, 'var(--red)', '−')+
-      '<div style="border-top:1px solid var(--ghost);margin:4px 0"></div>'+
-      bl('Capital ainda ativo (a render)', x.exposicao, 'var(--amber)', '=')+
-      bl('Saldo em caixa', x.saldo, 'var(--gold)', '+')+
-      '<div style="border-top:1px solid var(--ghost);margin:4px 0"></div>'+
-      bl('Valor atual real', x.exposicao+x.saldo, 'var(--green)', '=')+
-      '<div style="font-size:11px;color:var(--silver);margin-top:8px;border-top:1px solid var(--ghost);padding-top:8px">O total acumulado conta os mesmos euros várias vezes (investir → receber principal → reinvestir). Não é o que tens hoje.</div>';
-  }
-
-  // Teto
-  var inp=document.getElementById('scrambleTetoInp'); if(inp && document.activeElement!==inp) inp.value=scrambleTeto;
-  var pct=scrambleTeto>0?Math.min(100,(x.dep/scrambleTeto)*100):0;
-  var cor=pct>=90?'var(--red)':(pct>=70?'var(--amber)':'linear-gradient(90deg,var(--teal),var(--green))');
-  var bar=document.getElementById('scrambleTetoBar'); if(bar){ bar.style.width=pct.toFixed(0)+'%'; bar.style.background=cor; }
-  var txt=document.getElementById('scrambleTetoTxt');
-  if(txt){ var rest=scrambleTeto-x.dep;
-    txt.innerHTML=eur(x.dep)+' de '+eur(scrambleTeto)+' ('+pct.toFixed(0)+'%) — '+
-      (rest>=0?('margem disponível: '+eur(rest)):('<span style="color:var(--red);font-weight:700">teto excedido em '+eur(-rest)+'</span>'))+
-      (pct>=90&&rest>=0?' <span style="color:var(--red);font-weight:700">⚠ perto do limite</span>':'');
-  }
-
-  // Fiscal
-  var fb=document.getElementById('scrambleFiscalBody');
-  if(fb){ var anos=[2025,2026]; fb.innerHTML=anos.map(function(a){
-    var j=scrambleAno('juros',a); return '<tr><td>'+a+'</td><td style="color:var(--green)">'+eur(j)+'</td><td style="color:var(--silver)">'+eur(j*0.28)+'</td></tr>'; }).join(''); }
-
-  // Tabela de movimentos (mais recentes primeiro)
-  var tb=document.getElementById('scrambleBody');
-  if(tb){ var idx=scrambleMovs.map(function(m,i){return i;}).sort(function(a,b){ return (scrambleMovs[a].d<scrambleMovs[b].d)?1:(scrambleMovs[a].d>scrambleMovs[b].d?-1:a-b); });
-    tb.innerHTML=idx.map(function(i){ var m=scrambleMovs[i]; var neg=m.v<0;
-      return '<tr><td>'+m.d+'</td><td>'+(SC_LABELS[m.t]||m.t)+'</td><td style="text-align:right;color:'+(neg?'var(--red)':'var(--green)')+';font-weight:600">'+(neg?'−':'+')+'€'+Math.abs(m.v).toFixed(2)+'</td>'+
-        '<td><button onclick="delScrambleMov('+i+')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:13px" title="Remover">🗑</button></td></tr>'; }).join(''); }
-}
-
-function setScrambleTeto(v){ scrambleTeto=parseFloat(v)||0; saveScramble(); renderScramble(); }
-function addScrambleMov(){
-  var d=document.getElementById('scinp_data').value, t=document.getElementById('scinp_tipo').value, v=parseFloat(document.getElementById('scinp_valor').value);
-  if(!d || isNaN(v)){ alert('Indica data e valor.'); return; }
-  if(t==='investido') v=-Math.abs(v); else v=Math.abs(v);
-  scrambleMovs.push({d:d,t:t,v:Math.round(v*100)/100}); saveScramble(); renderScramble();
-  if(typeof renderKPIs==='function') try{renderKPIs();}catch(e){} if(typeof renderCarteiraResumo==='function') try{renderCarteiraResumo();}catch(e){}
-  document.getElementById('scinp_valor').value='';
-}
-function delScrambleMov(i){ if(!confirm('Remover este movimento?')) return; scrambleMovs.splice(i,1); saveScramble(); renderScramble(); if(typeof renderKPIs==='function') try{renderKPIs();}catch(e){} if(typeof renderCarteiraResumo==='function') try{renderCarteiraResumo();}catch(e){} }
-
-// Resumo consolidado (ETFs + Ações + P2P) no topo da Minha Carteira
-function renderCarteiraResumo(){
-  var el=document.getElementById('carteiraResumo'); if(!el) return;
-  var eur=function(n){ return '€'+Math.round(n).toLocaleString('pt-PT'); };
-  var etfVal=(typeof carteira!=='undefined')?carteira.reduce(function(s,e){return s+e.qtd*pActualEUR(e);},0):0;
-  var stockVal=0;
-  if(typeof STOCKS_DB!=='undefined' && typeof stockPos!=='undefined'){
-    STOCKS_DB.forEach(function(s){ var pos=stockPos[s.ticker]||{qtd:0,preco:0}; var p=((typeof precos!=='undefined')&&precos[s.ticker])||pos.preco||0; stockVal+=pos.qtd*p; });
-  }
-  var scrVal=(typeof scrambleValorAtual==='function')?scrambleValorAtual():0;
-  var total=etfVal+stockVal+scrVal;
-  var pct=function(v){ return total>0?(v/total*100).toFixed(0)+'%':'0%'; };
-  var cards=[
-    {l:'ETFs',v:etfVal,c:'var(--teal)',s:pct(etfVal)+' do total'},
-    {l:'Ações',v:stockVal,c:'var(--amber)',s:pct(stockVal)+' do total'},
-    {l:'Scramble / P2P',v:scrVal,c:'var(--green)',s:pct(scrVal)+' do total'},
-    {l:'Património Total',v:total,c:'var(--gold)',s:'ETFs + Ações + P2P'}
-  ];
-  el.innerHTML=cards.map(function(k){ return '<div class="kpi-card" style="border-left-color:'+k.c+'"><div class="kpi-label">'+k.l+'</div><div class="kpi-value" style="color:'+k.c+'">'+eur(k.v)+'</div><div class="kpi-sub">'+k.s+'</div></div>'; }).join('');
-}
-
-// ═══════════════════════════════════════════════════════════════
-// EVOLUÇÃO & COMPARAÇÃO DE ETFs (histórico Yahoo, base 100)
-// Modos: "eur" (€1.000 simulado) | "pct" (rentabilidade acumulada %)
-// ═══════════════════════════════════════════════════════════════
-var histCache={};
-function histQuery(range){
-  var now=Math.floor(Date.now()/1000);
-  var spec={ytd:{r:'ytd',i:'1d'},'1y':{r:'1y',i:'1d'},'3y':{p:3,i:'1wk'},'5y':{r:'5y',i:'1wk'},max:{r:'max',i:'1mo'}}[range]||{r:'1y',i:'1d'};
-  if(spec.p) return 'period1='+(now-Math.round(spec.p*31557600))+'&period2='+now+'&interval='+spec.i;
-  return 'range='+spec.r+'&interval='+spec.i;
-}
-async function fetchHistory(ticker, range){
-  var key=ticker+'|'+range;
-  if(histCache[key]) return histCache[key];
-  var cand = YF_SYMBOLS[ticker] ? [YF_SYMBOLS[ticker],ticker+'.DE',ticker+'.MI',ticker+'.PA',ticker+'.L',ticker] : [ticker+'.DE',ticker+'.L',ticker];
-  cand=[...new Set(cand)];
-  for(const symbol of cand){
-    var url='https://query1.finance.yahoo.com/v8/finance/chart/'+symbol+'?'+histQuery(range);
-    var data=await yfFetchJson(url);
-    var r=data&&data.chart&&data.chart.result&&data.chart.result[0];
-    if(r&&r.timestamp&&r.indicators&&r.indicators.quote&&r.indicators.quote[0]){
-      var ts=r.timestamp, cl=r.indicators.quote[0].close, s=[];
-      for(var i=0;i<ts.length;i++){ if(cl[i]!=null) s.push({t:ts[i]*1000,c:cl[i]}); }
-      if(s.length>1){ histCache[key]=s; return s; }
-    }
-  }
-  return null;
-}
-function normSeries(s){ var base=s[0].c; return s.map(function(p){ return {t:p.t, v:p.c/base*100}; }); } // base 100
-function modeY(v, mode){ return mode==='eur' ? v*10 : v-100; } // eur: €1.000; pct: retorno %
-function modeFmt(y, mode){ return mode==='eur' ? '€'+y.toLocaleString('pt-PT',{maximumFractionDigits:0}) : (y>=0?'+':'')+y.toFixed(1)+'%'; }
-var EVOL_COLS=['#2dd4bf','#22c55e','#f59e0b','#a78bfa','#60a5fa','#f472b6','#facc15','#fb7185','#34d399','#818cf8'];
-function buildAligned(list, mode){
-  var tset={}; list.forEach(function(s){ s.norm.forEach(function(p){ tset[p.t]=1; }); });
-  var labels=Object.keys(tset).map(Number).sort(function(a,b){return a-b;});
-  var datasets=list.map(function(s){
-    var map={}; s.norm.forEach(function(p){ map[p.t]=p.v; });
-    return { label:s.label, data:labels.map(function(t){ return map[t]!=null?modeY(map[t],mode):null; }),
-      borderColor:s.color, backgroundColor:'transparent', borderWidth:2, pointRadius:0, tension:.15, spanGaps:true };
-  });
-  var labStr=labels.map(function(t){ return new Date(t).toLocaleDateString('pt-PT',{month:'short',year:'2-digit'}); });
-  return {labels:labStr, datasets:datasets};
-}
-function evolChartOpts(mode){
-  return {responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-    scales:{x:{ticks:{color:'#94a3b8',maxTicksLimit:8},grid:{color:'rgba(148,163,184,.08)'}},
-      y:{ticks:{color:'#94a3b8',callback:function(v){return modeFmt(v,mode);}},grid:{color:'rgba(148,163,184,.1)'},
-        title:{display:true,text:(mode==='eur'?'Valor de €1.000 investido':'Rentabilidade acumulada'),color:'#94a3b8'}}},
-    plugins:{legend:{labels:{color:'#cbd5e1',boxWidth:12,font:{size:11}}},
-      tooltip:{callbacks:{label:function(c){ return c.dataset.label+': '+(c.parsed.y!=null?modeFmt(c.parsed.y,mode):'—'); }}}}};
-}
-
-// --- Evolução dos ETFs detidos ---
-var evolRange='1y', evolMode='eur';
-function setEvolMode(m){ evolMode=m; updateModeBtns('evolmode',evolMode); renderEvolucaoETFs(); }
-function updateModeBtns(attr,val){ document.querySelectorAll('['+ (attr==='evolmode'?'data-evolmode':'data-cmpmode') +']').forEach(function(b){ var k=b.getAttribute(attr==='evolmode'?'data-evolmode':'data-cmpmode'); b.style.opacity=(k===val)?'1':'.45'; }); }
-async function renderEvolucaoETFs(range){
-  if(range) evolRange=range;
-  document.querySelectorAll('[data-evolrange]').forEach(function(b){ b.style.opacity=(b.getAttribute('data-evolrange')===evolRange)?'1':'.45'; });
-  updateModeBtns('evolmode',evolMode);
-  var cv=document.getElementById('chartEvolucao'); if(!cv) return;
-  var status=document.getElementById('evolStatus'), cardsEl=document.getElementById('evolCards');
-  var tickers=[...new Set((typeof carteira!=='undefined'?carteira:[]).map(function(c){return c.ticker;}))];
-  if(tickers.length===0){ if(status) status.textContent='Sem ETFs na carteira.'; return; }
-  if(status) status.textContent='🔄 A carregar histórico dos teus ETFs...';
-  var list=[], fail=[];
-  for(var i=0;i<tickers.length;i++){
-    var h=await fetchHistory(tickers[i], evolRange);
-    if(h) list.push({label:tickers[i], color:EVOL_COLS[list.length%EVOL_COLS.length], norm:normSeries(h)});
-    else fail.push(tickers[i]);
-  }
-  destroyChart('chartEvolucao');
-  if(list.length===0){ if(status) status.textContent='⚠ Não consegui carregar histórico (Yahoo/CORS bloqueado nesta rede).'; if(cardsEl) cardsEl.innerHTML=''; return; }
-  charts['chartEvolucao']=new Chart(cv,{type:'line',data:buildAligned(list,evolMode),options:evolChartOpts(evolMode)});
-  // cartões-resumo (ordenados por retorno)
-  if(cardsEl){
-    var rows=list.map(function(s){ var fim=s.norm[s.norm.length-1].v; return {tk:s.label,color:s.color,ret:fim-100,val:fim*10}; }).sort(function(a,b){return b.ret-a.ret;});
-    cardsEl.innerHTML=rows.map(function(r){ var cor=r.ret>=0?'var(--green)':'var(--red)';
-      return '<div class="kpi-card" style="border-left-color:'+r.color+'"><div class="kpi-label">'+r.tk+'</div>'+
-        '<div class="kpi-value" style="font-size:18px;color:'+r.color+'">€'+r.val.toLocaleString('pt-PT',{maximumFractionDigits:0})+'</div>'+
-        '<div class="kpi-sub" style="color:'+cor+';font-weight:700">'+(r.ret>=0?'+':'')+r.ret.toFixed(1)+'%</div></div>'; }).join('');
-  }
-  if(status) status.textContent='✅ '+(evolMode==='eur'?'Valor de €1.000 investido':'Rentabilidade acumulada')+' no período'+(fail.length?(' · sem dados: '+fail.join(', ')):'');
-}
-
-// --- Comparação: candidato (biblioteca) vs detido mais parecido ---
-function similarHeld(libT){
-  var lib=ETFS.find(function(e){return e.t===libT;}); if(!lib) return null;
-  var held=[...new Set((typeof carteira!=='undefined'?carteira:[]).map(function(c){return c.ticker;}))];
-  var bySec=held.filter(function(tk){ var e=ETFS.find(function(x){return x.t===tk;}); return e&&e.s===lib.s; });
-  if(bySec.length) return bySec[0];
-  var byPerf=held.filter(function(tk){ var e=ETFS.find(function(x){return x.t===tk;}); return e&&e.perfil===lib.perfil; });
-  if(byPerf.length) return byPerf[0];
-  return held[0]||null;
-}
-function populateCompara(){
-  var selL=document.getElementById('cmpLib'), selH=document.getElementById('cmpHeld');
-  if(!selL||!selH) return;
-  if(!selL.options.length){
-    ETFS.slice().sort(function(a,b){return a.t<b.t?-1:1;}).forEach(function(e){ var o=document.createElement('option'); o.value=e.t; o.textContent=e.t+' — '+e.n; selL.appendChild(o); });
-  }
-  var held=[...new Set((typeof carteira!=='undefined'?carteira:[]).map(function(c){return c.ticker;}))];
-  selH.innerHTML=''; held.forEach(function(tk){ var e=ETFS.find(function(x){return x.t===tk;}); var o=document.createElement('option'); o.value=tk; o.textContent=tk+(e?(' — '+e.n):''); selH.appendChild(o); });
-  var sug=similarHeld(selL.value); if(sug) selH.value=sug;
-}
-function onCmpLibChange(){ var sug=similarHeld(document.getElementById('cmpLib').value); if(sug) document.getElementById('cmpHeld').value=sug; }
-var cmpRange='1y', cmpMode='eur';
-function setCmpMode(m){ cmpMode=m; updateModeBtns('cmpmode',cmpMode); renderComparacao(); }
-async function renderComparacao(range){
-  if(range) cmpRange=range;
-  document.querySelectorAll('[data-cmprange]').forEach(function(b){ b.style.opacity=(b.getAttribute('data-cmprange')===cmpRange)?'1':'.45'; });
-  updateModeBtns('cmpmode',cmpMode);
-  var cv=document.getElementById('chartCompara'); if(!cv) return;
-  var status=document.getElementById('cmpStatus'), verdict=document.getElementById('cmpVerdict');
-  var libT=document.getElementById('cmpLib').value, heldT=document.getElementById('cmpHeld').value;
-  if(!libT||!heldT){ if(status) status.textContent='Escolhe os dois ETFs.'; return; }
-  if(status) status.textContent='🔄 A carregar histórico de '+libT+' e '+heldT+'...';
-  if(verdict) verdict.innerHTML='';
-  var hL=await fetchHistory(libT,cmpRange), hH=await fetchHistory(heldT,cmpRange);
-  destroyChart('chartCompara');
-  if(!hL&&!hH){ if(status) status.textContent='⚠ Sem histórico (Yahoo/CORS bloqueado nesta rede).'; return; }
-  var list=[];
-  if(hH) list.push({label:heldT+' (detido)', color:'#2dd4bf', norm:normSeries(hH)});
-  if(hL) list.push({label:libT+' (candidato)', color:'#f59e0b', norm:normSeries(hL)});
-  charts['chartCompara']=new Chart(cv,{type:'line',data:buildAligned(list,cmpMode),options:evolChartOpts(cmpMode)});
-  var perf=function(h){ if(!h) return null; var n=normSeries(h); return n[n.length-1].v-100; };
-  var pL=perf(hL), pH=perf(hH);
-  if(verdict && pL!=null && pH!=null){
-    var diff=pL-pH, melhor=diff>=0?libT:heldT;
-    var valL=(pL/100+1)*1000, valH=(pH/100+1)*1000;
-    verdict.innerHTML='<div style="font-size:13px;margin-top:8px">€1.000 → <b style="color:#f59e0b">'+libT+'</b> €'+valL.toLocaleString('pt-PT',{maximumFractionDigits:0})+' ('+(pL>=0?'+':'')+pL.toFixed(1)+'%) · <b style="color:#2dd4bf">'+heldT+'</b> €'+valH.toLocaleString('pt-PT',{maximumFractionDigits:0})+' ('+(pH>=0?'+':'')+pH.toFixed(1)+'%) — <b>'+melhor+'</b> +'+Math.abs(diff).toFixed(1)+' p.p.</div>'+
-      '<div style="font-size:11px;color:var(--silver);margin-top:6px;border-top:1px solid var(--ghost);padding-top:6px">⚠ Desempenho passado não garante futuro. Antes de trocar: confirma UCITS + Acumulação + Replicação física, verifica sobreposição, e evita perseguir o que subiu mais. Apoio à decisão, não sinal de compra.</div>';
-  }
-  if(status) status.textContent='✅ '+(cmpMode==='eur'?'Valor de €1.000 investido':'Rentabilidade acumulada')+' no período';
-}
-
-var XTB_CARTEIRA=[
-  {"ticker": "C50", "nome": "Amundi Euro Stoxx 50", "setor": "Ações Europa", "perfil": "Crescimento", "data": "2026-05-25", "qtd": 0.5982, "precoCompra": 163.82},
-  {"ticker": "C50", "nome": "Amundi Euro Stoxx 50", "setor": "Ações Europa", "perfil": "Crescimento", "data": "2026-06-09", "qtd": 0.3321, "precoCompra": 164.5},
-  {"ticker": "CSPX", "nome": "iShares Core S&P 500", "setor": "Ações EUA", "perfil": "Crescimento/Moderado", "data": "2026-05-29", "qtd": 3.1989, "precoCompra": 814.95, "moeda": "USD"},
-  {"ticker": "JEDI", "nome": "VanEck Space Innovators", "setor": "Espaço", "perfil": "Temáticos", "data": "2026-05-25", "qtd": 1.8594, "precoCompra": 110.8866},
-  {"ticker": "JEDI", "nome": "VanEck Space Innovators", "setor": "Espaço", "perfil": "Temáticos", "data": "2026-05-26", "qtd": 4.4714, "precoCompra": 112.4623},
-  {"ticker": "NUKL", "nome": "VanEck Uranium & Nuclear", "setor": "Energia Nuclear", "perfil": "Temáticos", "data": "2026-06-09", "qtd": 5.902, "precoCompra": 47.7},
-  {"ticker": "NUKL", "nome": "VanEck Uranium & Nuclear", "setor": "Energia Nuclear", "perfil": "Temáticos", "data": "2026-06-15", "qtd": 8.3804, "precoCompra": 49.5648},
-  {"ticker": "SEC0", "nome": "iShares MSCI Semiconductors", "setor": "Semicondutores", "perfil": "Agressivo", "data": "2026-05-25", "qtd": 5.546, "precoCompra": 17.672},
-  {"ticker": "SEC0", "nome": "iShares MSCI Semiconductors", "setor": "Semicondutores", "perfil": "Agressivo", "data": "2026-06-09", "qtd": 2.7374, "precoCompra": 18.476},
-  {"ticker": "VWCE", "nome": "Vanguard FTSE All-World", "setor": "Ações Globais", "perfil": "Crescimento/Moderado", "data": "2026-05-29", "qtd": 33.0395, "precoCompra": 163.46},
-  {"ticker": "VWCE", "nome": "Vanguard FTSE All-World", "setor": "Ações Globais", "perfil": "Crescimento/Moderado", "data": "2026-06-08", "qtd": 3.0912, "precoCompra": 160.6776},
-  {"ticker": "VWCE", "nome": "Vanguard FTSE All-World", "setor": "Ações Globais", "perfil": "Crescimento/Moderado", "data": "2026-06-15", "qtd": 5.537, "precoCompra": 164.2484},
-  {"ticker": "VWCE", "nome": "Vanguard FTSE All-World", "setor": "Ações Globais", "perfil": "Crescimento/Moderado", "data": "2026-06-15", "qtd": 0.9904, "precoCompra": 164.14},
-  {"ticker": "WGLD", "nome": "WisdomTree Physical Gold", "setor": "Ouro Físico", "perfil": "Todos", "data": "2026-05-29", "qtd": 3.0, "precoCompra": 385.54},
-  {"ticker": "WGLD", "nome": "WisdomTree Physical Gold", "setor": "Ouro Físico", "perfil": "Todos", "data": "2026-06-15", "qtd": 1.0, "precoCompra": 369.06},
-  {"ticker": "XDW0", "nome": "Xtrackers MSCI World", "setor": "Energia Global", "perfil": "Agressivo", "data": "2026-06-04", "qtd": 0.455, "precoCompra": 61.68},
-  {"ticker": "XDW0", "nome": "Xtrackers MSCI World", "setor": "Energia Global", "perfil": "Agressivo", "data": "2026-06-09", "qtd": 0.8128, "precoCompra": 60.71},
-  {"ticker": "XDW0", "nome": "Xtrackers MSCI World", "setor": "Energia Global", "perfil": "Agressivo", "data": "2026-06-15", "qtd": 6.5541, "precoCompra": 59.3808},
-  {"ticker": "XDWT", "nome": "Xtrackers MSCI World IT", "setor": "Tech Mundial", "perfil": "Temáticos", "data": "2026-06-04", "qtd": 0.2861, "precoCompra": 127.3}
-];
-function carregarCarteiraXTB(){
-  if(!confirm('Substituir a carteira de ETFs pelos 19 lotes reais da XTB (3 contas)?\n\nAções, P2P / Scramble e parâmetros FIRE NÃO são afetados.')) return;
-  carteira = XTB_CARTEIRA.map(function(l,i){ return Object.assign({notas:'XTB'}, l, {id:Date.now()+i}); });
-  try{ localStorage.setItem('fireCarteira', JSON.stringify(carteira)); }catch(e){}
-  if(typeof renderAll==='function') renderAll();
-  if(typeof switchCarteiraTab==='function') switchCarteiraTab('etf');
-  alert('✅ Carteira atualizada: '+carteira.length+' lotes em '+[...new Set(carteira.map(function(c){return c.ticker;}))].length+' ETFs.');
-}
-
-
 function exportData(){
   var data={versao:3,exportadoEm:new Date().toISOString(),carteira,arquivo,fireParams,
     stockPos:(typeof stockPos!=='undefined'?stockPos:{}),
     stockRej:(typeof stockRej!=='undefined'?stockRej:[]),
-    divRecebidos:(typeof divRecebidos!=='undefined'?divRecebidos:[]),
-    scrambleMovs:(typeof scrambleMovs!=='undefined'?scrambleMovs:[]),
-    scrambleTeto:(typeof scrambleTeto!=='undefined'?scrambleTeto:0)};
+    divRecebidos:(typeof divRecebidos!=='undefined'?divRecebidos:[])};
   var json=JSON.stringify(data,null,2);
   var box=document.getElementById('exportBox');
   var txt=document.getElementById('exportText');
@@ -2142,9 +1743,6 @@ function importData(){
       if(data.stockPos&&typeof stockPos!=='undefined') Object.assign(stockPos,data.stockPos);
       if(data.stockRej&&typeof stockRej!=='undefined') stockRej=data.stockRej;
       if(data.divRecebidos&&typeof divRecebidos!=='undefined') divRecebidos=data.divRecebidos;
-      if(data.scrambleMovs&&Array.isArray(data.scrambleMovs)){ scrambleMovs=data.scrambleMovs; }
-      if(typeof data.scrambleTeto==='number'){ scrambleTeto=data.scrambleTeto; }
-      if(typeof saveScramble==='function') saveScramble();
       localStorage.setItem('fireCarteira',JSON.stringify(carteira));
       localStorage.setItem('fireParams',JSON.stringify(fireParams));
       localStorage.setItem('fireArquivo',JSON.stringify(arquivo));
@@ -2229,6 +1827,15 @@ var STOCKS_DB = [
 
 // ── BIBLIOTECA DE AÇÕES — Referência/Análise (não em carteira) ──
 var STOCKS_LIBRARY=[
+  // ── ALTO YIELD — Income (rendimento elevado, historial longo) ──
+  {ticker:'ARCC',nome:'Ares Capital Corporation',setor:'BDC / Private Credit',cat:'Alto Yield — Income',cor:'#2dd4a7',
+   yield:0.103,payout:90,anos:21,sl:0,tp:0,risco:'Médio',rPct:45,v:'watch',broker:'',moeda:'USD',
+   freq:'Trimestral',meses:[3,6,9,12],exDivDia:15,divAnual:1.92,
+   nota:'INCOME · Maior BDC do mercado · paga desde 2004 · +20% dividendo desup 2021 · 7% desconto NAV · retenção 30% IRS EUA (15% c/ W-8BEN) · Nao comprado'},
+  {ticker:'PFLT',nome:'PennantPark Floating Rate Capital',setor:'BDC / Taxa Variável',cat:'Alto Yield — Income',cor:'#fbbf24',
+   yield:0.128,payout:95,anos:14,sl:0,tp:0,risco:'Alto',rPct:65,v:'watch',broker:'',moeda:'USD',
+   freq:'Mensal',meses:[1,2,3,4,5,6,7,8,9,10,11,12],exDivDia:15,divAnual:1.23,
+   nota:'INCOME MENSAL · paga sem interrupcao desde 2011 · taxa variavel (beneficia juros altos) · 160 empresas/50 industrias · risco ciclico · retencao 30% IRS · Nao comprado'},
   {ticker:'NVDA',nome:'NVIDIA Corporation',setor:'Semicondutores / IA',cat:'Growth — Curto Prazo',cor:'#76b900',yield:0.0003,payout:0,anos:0,sl:-15,tp:30,risco:'Alto',rPct:65,v:'watch',broker:'',moeda:'USD',freq:'Trimestral',meses:[],exDivDia:0,divAnual:0.04,nota:'CURTO PRAZO · Distributivo (ganho capital) · CFRA Strong Buy $250 (+40%) · Nao comprado'},
   {ticker:'LLY',nome:'Eli Lilly',setor:'Healthcare / GLP-1',cat:'Growth — Curto Prazo',cor:'#e91e8c',yield:0.006,payout:0,anos:0,sl:-15,tp:30,risco:'Medio-Alto',rPct:50,v:'watch',broker:'',moeda:'USD',freq:'Trimestral',meses:[],exDivDia:0,divAnual:6.0,nota:'CURTO PRAZO · Distributivo (ganho capital) · CFRA Buy $1.225 · Nao comprado'},
   {ticker:'META',nome:'Meta Platforms',setor:'Tech / IA / Social',cat:'Growth — Curto Prazo',cor:'#0081fb',yield:0.003,payout:0,anos:0,sl:-15,tp:30,risco:'Medio-Alto',rPct:55,v:'watch',broker:'',moeda:'USD',freq:'Trimestral',meses:[],exDivDia:0,divAnual:2.0,nota:'CURTO PRAZO · Distributivo (ganho capital) · CFRA Strong Buy $750 · Nao comprado'},
@@ -2565,37 +2172,11 @@ function renderStockCarteiraPanel(){
 function switchCarteiraTab(tab){
   document.getElementById('carteira-etf-panel').style.display=tab==='etf'?'block':'none';
   document.getElementById('carteira-stock-panel').style.display=tab==='stock'?'block':'none';
-  var p2p=document.getElementById('carteira-p2p-panel'); if(p2p) p2p.style.display=tab==='p2p'?'block':'none';
   document.getElementById('ctab-etf').style.background=tab==='etf'?'var(--teal)':'var(--ghost)';
   document.getElementById('ctab-etf').style.color=tab==='etf'?'var(--navy)':'var(--silver)';
   document.getElementById('ctab-stock').style.background=tab==='stock'?'var(--amber)':'var(--ghost)';
   document.getElementById('ctab-stock').style.color=tab==='stock'?'var(--navy)':'var(--silver)';
-  var bp=document.getElementById('ctab-p2p');
-  if(bp){ bp.style.background=tab==='p2p'?'var(--green)':'var(--ghost)'; bp.style.color=tab==='p2p'?'var(--navy)':'var(--silver)'; }
   if(tab==='stock')renderStockCarteiraPanel();
-  if(tab==='p2p' && typeof renderCarteiraP2P==='function')renderCarteiraP2P();
-}
-
-function renderCarteiraP2P(){
-  if(typeof scrambleTotais!=='function') return;
-  var x=scrambleTotais(), eur=function(n){return '€'+n.toLocaleString('pt-PT',{minimumFractionDigits:2,maximumFractionDigits:2});};
-  var xirr=(typeof scrambleXIRR==='function')?scrambleXIRR():null;
-  var xirrTxt=(xirr!==null&&isFinite(xirr))?('+'+(xirr*100).toFixed(1)+'%'):'—';
-  var valor=x.exposicao+x.saldo;
-  var k=[
-    {l:'Valor P2P',v:eur(valor),c:'var(--green)'},
-    {l:'Capital próprio',v:eur(x.dep),c:'var(--white)'},
-    {l:'Ganho (juros+bónus)',v:eur(x.ganho),c:'var(--green)'},
-    {l:'TIR anualizada',v:xirrTxt,c:'var(--teal)'}
-  ];
-  var ke=document.getElementById('cartP2PKpis');
-  if(ke) ke.innerHTML=k.map(function(c){return '<div class="kpi-card" style="border-left-color:'+c.c+'"><div class="kpi-label">'+c.l+'</div><div class="kpi-value" style="color:'+c.c+'">'+c.v+'</div></div>';}).join('');
-  var tb=document.getElementById('cartP2PBody');
-  if(tb && typeof scrambleMovs!=='undefined'){
-    var SC={deposito:'Depósito próprio',investido:'Investido (crédito)',principal:'Principal devolvido',juros:'Juros recebidos',bonus:'Bónus'};
-    var idx=scrambleMovs.map(function(m,i){return i;}).sort(function(a,b){return scrambleMovs[a].d<scrambleMovs[b].d?1:(scrambleMovs[a].d>scrambleMovs[b].d?-1:0);});
-    tb.innerHTML=idx.map(function(i){var m=scrambleMovs[i],neg=m.v<0;return '<tr><td>'+m.d+'</td><td>'+(SC[m.t]||m.t)+'</td><td style="text-align:right;color:'+(neg?'var(--red)':'var(--green)')+';font-weight:600">'+(neg?'−':'+')+'€'+Math.abs(m.v).toFixed(2)+'</td></tr>';}).join('');
-  }
 }
 
 function switchBibTab(tab){
@@ -3211,67 +2792,6 @@ function initCalendario(){
     <table>
       <thead><tr><th>Data</th><th>Ticker</th><th>Valor $</th><th>Tipo</th><th>Acção</th></tr></thead>
       <tbody id="divRecebidosBody"></tbody>
-    </table>
-  </div>
-</div>
-
-<!-- ══ SCRAMBLE / P2P ═══════════════════════════════════════ -->
-<div id="scramble" class="section">
-  <div class="section-title">🏦 Scramble / P2P — Sleeve Alternativo</div>
-  <div class="alert alert-info">⚠️ Sleeve de risco elevado, separado do núcleo de ETFs. P2P lending estónio (Scramble OÜ): sem garantia de depósitos, sem mercado secundário (capital preso 6+ meses). Regras: manter-se em <strong>Group A</strong> (sénior), escalonar entradas por vários meses e respeitar o teto definido abaixo.</div>
-
-  <div class="kpi-grid" id="scrambleKpis"></div>
-
-  <div id="scrambleComposicao" style="background:var(--card-solid);border-radius:12px;padding:16px;margin-bottom:20px;border-left:3px solid var(--green);box-shadow:var(--shadow)"></div>
-
-  <div id="scrambleBridge" style="background:var(--card-solid);border-radius:12px;padding:16px;margin-bottom:20px;border-left:3px solid var(--amber);box-shadow:var(--shadow)"></div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px" id="scrambleMidGrid">
-    <div class="carteira-form" style="margin-bottom:0">
-      <div class="form-title">🎯 Teto do Sleeve (capital próprio máx.)</div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-        <span style="font-size:13px;color:var(--silver)">€</span>
-        <input type="number" id="scrambleTetoInp" step="50" min="0" onchange="setScrambleTeto(this.value)" style="width:120px;background:var(--ghost);border:2px solid var(--gold);color:var(--gold);padding:8px;border-radius:6px;font-size:16px;font-weight:700;text-align:center">
-        <span style="font-size:11px;color:var(--silver)">valor editável — ajusta ao teu plano</span>
-      </div>
-      <div style="height:12px;background:var(--ghost);border-radius:6px;overflow:hidden;margin-bottom:6px">
-        <div id="scrambleTetoBar" style="height:100%;border-radius:6px;transition:width .5s"></div>
-      </div>
-      <div id="scrambleTetoTxt" style="font-size:12px;color:var(--silver)"></div>
-    </div>
-    <div class="carteira-form" style="margin-bottom:0">
-      <div class="form-title">🧾 Resumo Fiscal (juros — categoria E, Anexo J)</div>
-      <div class="table-wrap" style="box-shadow:none;background:transparent">
-        <table>
-          <thead><tr><th>Ano</th><th>Juros recebidos</th><th>IRS 28% est.</th></tr></thead>
-          <tbody id="scrambleFiscalBody"></tbody>
-        </table>
-      </div>
-      <div style="font-size:11px;color:var(--silver);margin-top:8px">Fonte: Estónia (EE), código E11. A Scramble não retém imposto — declaração é tua. Bónus não monetário pode ser tributável (tratamento cinzento).</div>
-    </div>
-  </div>
-
-  <div class="carteira-form">
-    <div class="form-title">➕ Registar Movimento</div>
-    <div class="form-grid">
-      <div class="form-group"><label>Data</label><input type="date" id="scinp_data"></div>
-      <div class="form-group"><label>Tipo</label><select id="scinp_tipo">
-        <option value="deposito">Depósito próprio</option>
-        <option value="investido">Investido (crédito)</option>
-        <option value="principal">Principal devolvido</option>
-        <option value="juros">Juros recebidos</option>
-        <option value="bonus">Bónus</option>
-      </select></div>
-      <div class="form-group"><label>Valor (€)</label><input type="number" id="scinp_valor" step="0.01" placeholder="0.00"></div>
-    </div>
-    <br><button class="btn btn-primary" onclick="addScrambleMov()">➕ Adicionar Movimento</button>
-    <span style="font-size:11px;color:var(--silver);margin-left:10px">"Investido" é registado como saída (negativo) automaticamente.</span>
-  </div>
-
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Data</th><th>Tipo</th><th style="text-align:right">Valor</th><th>Ação</th></tr></thead>
-      <tbody id="scrambleBody"></tbody>
     </table>
   </div>
 </div>

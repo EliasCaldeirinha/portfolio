@@ -1,0 +1,21 @@
+{
+  "name": "FIRE Dashboard EC",
+  "short_name": "FIRE EC",
+  "start_url": "/portfolio/",
+  "scope": "/portfolio/",
+  "display": "standalone",
+  "background_color": "#0e1f18",
+  "theme_color": "#0e1f18",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQyIiBmaWxsPSIjMGUxZjE4Ii8+PGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iNzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJkZDRhNyIgc3Ryb2tlLXdpZHRoPSI2Ii8+PHRleHQgeD0iOTYiIHk9IjExOCIgZm9udC1mYW1pbHk9IlNlZ29lIFVJLEFyaWFsIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMmRkNGE3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5FQzwvdGV4dD48dGV4dCB4PSI5NiIgeT0iMTUyIiBmb250LWZhbWlseT0iU2Vnb2UgVUksQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiM5ZGI4YWMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZJUkU8L3RleHQ+PC9zdmc+",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQyIiBmaWxsPSIjMGUxZjE4Ii8+PGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iNzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJkZDRhNyIgc3Ryb2tlLXdpZHRoPSI2Ii8+PHRleHQgeD0iOTYiIHk9IjExOCIgZm9udC1mYW1pbHk9IlNlZ29lIFVJLEFyaWFsIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMmRkNGE3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5FQzwvdGV4dD48dGV4dCB4PSI5NiIgeT0iMTUyIiBmb250LWZhbWlseT0iU2Vnb2UgVUksQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiM5ZGI4YWMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZJUkU8L3RleHQ+PC9zdmc+",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
