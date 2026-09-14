@@ -326,6 +326,14 @@ tbody td { padding: 9px 12px; vertical-align: middle; }
 <div id="dashboard" class="section active">
   <div class="kpi-grid" id="kpiGrid"></div>
 
+  <div class="card" style="background:var(--card-solid);border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:var(--shadow);border-left:4px solid var(--amber)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div style="font-size:14px;font-weight:700;color:var(--amber)">📉 Plano de Oportunidades — Comprar as Quedas</div>
+      <div style="font-size:11px;color:var(--silver)">Munição: €2.000 · DCA mensal continua à parte</div>
+    </div>
+    <div id="planoOportunidades" style="display:grid;gap:8px"></div>
+    <div style="font-size:10px;color:var(--silver);margin-top:10px">S&P 500 de referência: <input type="number" id="spAtualInput" value="7533" style="width:80px;background:var(--ghost);border:1px solid var(--mid);color:var(--white);border-radius:4px;padding:2px 6px" onchange="renderPlanoOportunidades()"> (introduz o valor actual para ver que níveis já dispararam)</div>
+  </div>
   <div class="charts-grid">
     <div class="chart-card">
       <div class="chart-title">📊 Os Meus ETFs & Ações — Alocação Real</div>
@@ -503,7 +511,7 @@ tbody td { padding: 9px 12px; vertical-align: middle; }
   </div>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Ticker</th><th>Nome</th><th>Setor</th><th>TER%</th><th>Ret.6M</th><th>Ret.12M</th><th>Ret.24M</th><th>AI</th><th>Perspetiva</th><th>Risco</th><th>Replicação</th><th>Perfil</th><th>Investido€</th><th>justETF</th></tr></thead>
+      <thead><tr><th>Ticker</th><th>Nome</th><th>Setor</th><th>TER%</th><th>Ret.6M</th><th>Ret.12M</th><th>Ret.24M</th><th>AI</th><th>Perspetiva</th><th>Risco</th><th>Replicação</th><th>Moeda</th><th>Perfil</th><th>Investido€</th><th>justETF</th></tr></thead>
       <tbody id="bibBody"></tbody>
     </table>
   </div>
@@ -639,7 +647,7 @@ tbody td { padding: 9px 12px; vertical-align: middle; }
 // DADOS MASTER
 // ═══════════════════════════════════════════════════════════════
 const ETFS = [
-  {t:"VWCE",n:"Vanguard FTSE All-World",s:"Ações Globais",g:"A",ter:0.22,sent:"Positiva",r6:8,r12:16,r24:30,ai:88,risco:"Moderado",rep:"Física",perfil:"Crescimento/Moderado",peso:20,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B3RBWM25"},
+  {t:"VWCE",n:"Vanguard FTSE All-World (Acc)",s:"Ações Globais",g:"A",ter:0.22,sent:"Positiva",r6:8,r12:16,r24:30,ai:88,risco:"Moderado",rep:"Física",perfil:"Crescimento/Moderado",peso:20,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BK5BQT80"},
   {t:"CSPX",n:"iShares Core S&P 500",s:"Ações EUA",g:"B",ter:0.07,sent:"Positiva",r6:9,r12:18,r24:35,ai:93,risco:"Moderado",rep:"Física",perfil:"Crescimento/Moderado",peso:15,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B5BMR087"},
   {t:"IWDA",n:"iShares Core MSCI World",s:"Merc. Desenvolvidos",g:"B",ter:0.20,sent:"Neutra",r6:8,r12:16,r24:30,ai:91,risco:"Moderado",rep:"Física",perfil:"Moderado",peso:10,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B4L5Y983"},
   {t:"SWRD",n:"SPDR MSCI World",s:"Merc. Desenvolvidos",g:"B",ter:0.12,sent:"Neutra",r6:8,r12:16,r24:30,ai:90,risco:"Moderado",rep:"Física",perfil:"Alternativa",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B44Z5B48"},
@@ -652,17 +660,22 @@ const ETFS = [
   {t:"AGGG",n:"iShares Core Global Aggregate Bond",s:"Obrigações",g:"G",ter:0.10,sent:"Neutra",r6:2,r12:4,r24:8,ai:65,risco:"Baixo",rep:"Física",perfil:"Moderado",peso:10,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B3F81409"},
   {t:"IWDP",n:"iShares Dev. Markets Property",s:"Imobiliário (REIT)",g:"D",ter:0.59,sent:"Mista",r6:6,r12:12,r24:22,ai:72,risco:"Moderado",rep:"Física",perfil:"Moderado",peso:5,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B1FZS350"},
   {t:"TRET",n:"VanEck Global Real Estate",s:"Imobiliário (REIT)",g:"D",ter:0.25,sent:"Mista",r6:5,r12:11,r24:20,ai:70,risco:"Moderado",rep:"Física",perfil:"Alternativa",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=NL0009690239"},
-  {t:"WGLD",n:"WisdomTree Core Physical Gold",s:"Ouro Físico",g:"G",ter:0.10,sent:"Positiva",r6:15,r12:28,r24:45,ai:78,risco:"Moderado",rep:"Colateral físico",perfil:"Todos",peso:5,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BKRGM977"},
+  {t:"WGLD",n:"WisdomTree Core Physical Gold",s:"Ouro Físico",g:"G",ter:0.10,sent:"Cautelosa",r6:15,r12:-9,r24:45,ai:78,risco:"Moderado",rep:"Colateral físico",perfil:"Todos",peso:5,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BKRGM977"},
   {t:"SSLN",n:"iShares Physical Silver",s:"Prata Física",g:"G",ter:0.20,sent:"Positiva",r6:12,r12:22,r24:38,ai:75,risco:"Elevado",rep:"Colateral físico",perfil:"Agressivo",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B4NCWG09"},
   {t:"XLES",n:"Invesco US Energy Sector",s:"Energia EUA",g:"B",ter:0.14,sent:"Cautelosa",r6:-2,r12:-4,r24:5,ai:55,risco:"Elevado",rep:"Física",perfil:"Agressivo",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B5MTWF07"},
   {t:"INRG",n:"iShares Global Clean Energy",s:"Energia Limpa",g:"G",ter:0.65,sent:"Neutra",r6:10,r12:18,r24:32,ai:70,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B1XNHC34"},
   {t:"WTAI",n:"WisdomTree AI UCITS",s:"IA & Big Data",g:"C",ter:0.40,sent:"Positiva",r6:25,r12:35,r24:60,ai:95,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:4,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BDVPNG13"},
   {t:"RBOT",n:"iShares Automation & Robotics",s:"Robótica & Auto.",g:"C",ter:0.40,sent:"Positiva",r6:20,r12:30,r24:55,ai:91,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BYZK4552"},
   {t:"ISPY",n:"L&G Cyber Security",s:"Cibersegurança",g:"C",ter:0.69,sent:"Positiva",r6:24,r12:35,r24:58,ai:92,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:4,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BYPLS672"},
-  {t:"EUDF",n:"WisdomTree Europe Defence",s:"Defesa",g:"C",ter:0.41,sent:"Positiva",r6:35,r12:45,r24:80,ai:94,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:4,url:"https://www.justetf.com/en/etf-profile.html?isin=IE0002Y9QT36"},
-  {t:"DFEN",n:"iShares Global Aerospace & Defence",s:"Defesa",g:"C",ter:0.35,sent:"Positiva",r6:28,r12:38,r24:65,ai:92,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:2,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BMW3QW58"},
-  {t:"XDWH",n:"Xtrackers MSCI World Health Care",s:"Saúde & Biotech",g:"G",ter:0.25,sent:"Neutra",r6:15,r12:20,r24:35,ai:84,risco:"Moderado",rep:"Física",perfil:"Temáticos",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BM67HN09"},
-  {t:"JEDI",n:"VanEck Space Innovators",s:"Espaço",g:"C",ter:0.55,sent:"Positiva",r6:45,r12:86,r24:120,ai:94,risco:"Muito Elevado",rep:"Física",perfil:"Temáticos",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE000YU9K6K2"},
+  {t:"XMME",n:"Xtrackers MSCI Emerging Markets 1C",s:"Emergentes",g:"B",ter:0.18,sent:"Neutra",r6:0,r12:0,r24:0,ai:80,risco:"Elevado",rep:"Física",perfil:"Crescimento",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BTJRMP35"},
+  {t:"SEMA",n:"iShares MSCI EM (Acc) — large/mid",s:"Emergentes",g:"B",ter:0.18,sent:"Neutra",r6:0,r12:0,r24:0,ai:78,risco:"Elevado",rep:"Física",perfil:"Crescimento",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B4L5YC18"},
+  {t:"CNDX",n:"iShares Nasdaq 100 (Acc)",s:"Ações EUA Tech",g:"B",ter:0.33,sent:"Neutra",r6:0,r12:0,r24:0,ai:78,risco:"Elevado",rep:"Física",perfil:"Agressivo",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B53SZB19"},
+  {t:"VAGU",n:"Vanguard Global Aggregate Bond USD-Hgd",s:"Obrigações Globais",g:"A",ter:0.08,sent:"Neutra",r6:0,r12:0,r24:0,ai:80,risco:"Baixo",rep:"Física",perfil:"Moderado",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BG47KJ78"},
+  {t:"VAGE",n:"Vanguard Global Aggregate Bond EUR-Hgd",s:"Obrigações Globais",g:"A",ter:0.08,sent:"Neutra",r6:0,r12:0,r24:0,ai:84,risco:"Baixo",rep:"Física",perfil:"Moderado",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BG47KH54"},
+  {t:"WIRE",n:"Xtrackers Electrification & Smart Grid",s:"Rede Eléctrica / Infra",g:"G",ter:0.35,sent:"Positiva",r6:0,r12:0,r24:0,ai:86,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=IE000O7Q2E56"},
+  {t:"EUDF",n:"WisdomTree Europe Defence (EUR Acc)",s:"Defesa",g:"C",ter:0.40,sent:"Positiva",r6:35,r12:45,r24:80,ai:94,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:4,url:"https://www.justetf.com/en/etf-profile.html?isin=IE0002Y8CX98"},
+  {t:"XDWH",n:"Xtrackers MSCI World Health Care",s:"Saúde & Biotech",g:"G",ter:0.25,sent:"Neutra",r6:15,r12:20,r24:35,ai:84,risco:"Moderado",rep:"Física",perfil:"Temáticos",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BM67HK77"},
+  {t:"JEDI",n:"VanEck Space Innovators",s:"Espaço",g:"C",ter:0.55,sent:"Cautelosa",r6:45,r12:-40,r24:120,ai:55,risco:"Muito Elevado",rep:"Física",perfil:"Temáticos",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE000YU9K6K2"},
   {t:"STAR",n:"iShares Space Technologies UCITS ETF",s:"Espaço / Satélites / Drones",g:"C",ter:0.50,sent:"Positiva",r6:0,r12:0,r24:0,ai:85,risco:"Muito Elevado",rep:"Física",perfil:"Temáticos",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=IE000A9G9R73"},
   {t:"NUKL",n:"VanEck Uranium & Nuclear",s:"Energia Nuclear",g:"G",ter:0.55,sent:"Positiva",r6:20,r12:35,r24:60,ai:88,risco:"Elevado",rep:"Física",perfil:"Temáticos",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE0007C8DHJ9"},
   {t:"CHPX",n:"Global X AI Semiconductor & Quantum",s:"IA+Semicond.+Quantum",g:"C",ter:0.35,sent:"Positiva",r6:20,r12:32,r24:58,ai:93,risco:"Muito Elevado",rep:"Física",perfil:"Temáticos",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE000UXYS5L3"},
@@ -673,11 +686,11 @@ const ETFS = [
   {t:"AGED",n:"iShares Ageing Population",s:"Envelhecimento Pop.",g:"G",ter:0.40,sent:"Positiva",r6:8,r12:15,r24:28,ai:83,risco:"Moderado",rep:"Física",perfil:"Temáticos",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BYZK4669"},
   {t:"PHAU",n:"WisdomTree Physical Gold",s:"Ouro Físico",g:"G",ter:0.15,sent:"Positiva",r6:15,r12:27,r24:44,ai:77,risco:"Moderado",rep:"Colateral físico",perfil:"Alternativa",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=JE00B1VS3770"},
   {t:"WATX",n:"Lyxor World Water",s:"Água",g:"G",ter:0.60,sent:"Neutra",r6:10,r12:16,r24:28,ai:74,risco:"Moderado",rep:"Física",perfil:"Temáticos",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=FR0010527275"},
-  {t:"XDW0",n:"Xtrackers MSCI World Energy UCITS ETF",s:"Energia Global",g:"B",ter:0.25,sent:"Cautelosa",r6:-4,r12:8,r24:15,ai:62,risco:"Elevado",rep:"Física",perfil:"Agressivo",peso:2,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BM67HM91"},
+  {t:"XDW0",n:"Xtrackers MSCI World Energy UCITS ETF",s:"Energia Global",g:"B",ter:0.25,sent:"Cautelosa",r6:-4,r12:24,r24:15,ai:62,risco:"Elevado",rep:"Física",perfil:"Agressivo",peso:2,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BM67HM91"},
   {t:"XDWT",n:"Xtrackers MSCI World Information Technology",s:"Tech Mundial",g:"C",ter:0.25,sent:"Positiva",r6:20,r12:32,r24:60,ai:95,risco:"Elevado",rep:"Fisica",perfil:"Temáticos",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00BM67HT60"},
   {t:"SXR8",n:"iShares Core S&P 500 (Xetra) — duplicado CSPX",s:"Ações EUA",g:"B",ter:0.07,sent:"Positiva",r6:9,r12:18,r24:35,ai:93,risco:"Moderado",rep:"Física",perfil:"Moderado",peso:0,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B5BMR087"},
   {t:"C50",n:"Amundi Core EURO STOXX 50 UCITS ETF",s:"Ações Europa",g:"B",ter:0.05,sent:"Neutra",r6:6,r12:12,r24:22,ai:79,risco:"Moderado",rep:"Física",perfil:"Crescimento",peso:2,url:"https://www.justetf.com/en/etf-profile.html?isin=LU1681048804"},
-  {t:"SEC0",n:"iShares MSCI Global Semiconductors UCITS ETF",s:"Semicondutores",g:"C",ter:0.35,sent:"Positiva",r6:17,r12:34,r24:65,ai:95,risco:"Muito Elevado",rep:"Física",perfil:"Agressivo",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE00B3WJKG14"},
+  {t:"SEC0",n:"iShares MSCI Global Semiconductors UCITS ETF",s:"Semicondutores",g:"C",ter:0.35,sent:"Positiva",r6:17,r12:12,r24:65,ai:95,risco:"Muito Elevado",rep:"Física",perfil:"Agressivo",peso:3,url:"https://www.justetf.com/en/etf-profile.html?isin=IE000I8KRLL9"},
 ];
 
 const REJEITADOS = [
@@ -804,6 +817,96 @@ let carteira = JSON.parse(localStorage.getItem('fireCarteira') || '[]');
 
 let precos = {};
 
+// ── Linha de cotação: moeda em que a ordem é executada ────────
+// EUR evita comissão de conversão na XTB (~0,5%). O risco cambial
+// dos activos é o mesmo em qualquer linha — isto é só custo.
+var LINHA_COTACAO = {
+  // Confirmados no relatório XTB (11 Set 2026)
+  'VWCE':{m:'EUR',b:'VWCE.DE (Xetra)'},   'CSPX':{m:'USD',b:'CSPX.UK (Londres)',alt:'SXR8.DE em EUR'},
+  'WGLD':{m:'EUR',b:'WGLD.DE (Xetra)'},   'JEDI':{m:'EUR',b:'JEDI.DE (Xetra)'},
+  'NUKL':{m:'EUR',b:'NUKL.DE (Xetra)'},   'XDW0':{m:'EUR',b:'XDW0.DE (Xetra)'},
+  'XDWT':{m:'EUR',b:'XDWT.DE (Xetra)'},   'SEC0':{m:'EUR',b:'SEC0.DE (Xetra)'},
+  'C50' :{m:'EUR',b:'C50.FR (Euronext)'},
+  // Mesma ISIN do CSPX, linha em euros
+  'SXR8':{m:'EUR',b:'SXR8.DE (Xetra)'},
+  // Linhas habitualmente em USD — existe alternativa em EUR
+  'VWRA':{m:'USD',b:'LSE',alt:'VWCE.DE em EUR (mesma ISIN)'},
+  'CNDX':{m:'USD',b:'LSE',alt:'SXRV.DE em EUR (mesma ISIN)'},
+  'EIMI':{m:'USD',b:'LSE',alt:'IS3N.DE / EMIM em EUR'},
+  'IWDA':{m:'USD',b:'LSE',alt:'EUNL.DE em EUR (mesma ISIN)'},
+  'VAGU':{m:'USD',b:'LSE',alt:'VAGE em EUR-hedged'},
+};
+function moedaLinha(t){
+  var L = LINHA_COTACAO[t];
+  if(!L) return {m:'?',b:'verificar no justETF'};
+  return L;
+}
+
+
+// ── Datas macro a vigiar + pergunta pronta a copiar ──
+var MACRO_EVENTOS = [
+  {data:'2026-08-12', tipo:'CPI', titulo:'CPI de Julho (EUA)',
+   pergunta:'O que saiu no CPI de Julho nos EUA e o que muda para a minha carteira? Devo disparar alguma tranche do plano de oportunidades?'},
+  {data:'2026-09-04', tipo:'Emprego', titulo:'Payrolls de Agosto',
+   pergunta:'Como saíram os payrolls de Agosto e o que isso muda na probabilidade de subida de juros da Fed?'},
+  {data:'2026-09-11', tipo:'CPI', titulo:'CPI de Agosto (EUA)',
+   pergunta:'O que saiu no CPI de Agosto e como fica a probabilidade de subida na reunião da Fed deste mês?'},
+  {data:'2026-09-16', tipo:'FED', titulo:'Reunião Fed — 1ª subida possível',
+   pergunta:'O que decidiu a Fed na reunião de Setembro e como reagiu o mercado? Que devo fazer com a minha carteira e o plano de oportunidades?'},
+  {data:'2026-10-14', tipo:'CPI', titulo:'CPI de Setembro (EUA)',
+   pergunta:'O que saiu no CPI de Setembro e o que muda para os meus ETFs?'},
+  {data:'2026-10-28', tipo:'FED', titulo:'Reunião Fed — Outubro',
+   pergunta:'O que decidiu a Fed em Outubro e como está o S&P face aos meus níveis de compra (7.150 / 6.860 / 6.480)?'},
+  {data:'2026-12-09', tipo:'FED', titulo:'Reunião Fed — Dezembro',
+   pergunta:'Decisão da Fed de Dezembro: que balanço faço do ano e como preparo a carteira para 2027?'},
+  {data:'2026-12-31', tipo:'Fiscal', titulo:'Fecho fiscal — mais-valias 2026',
+   pergunta:'Revê as minhas vendas de 2026 (+185,67€ líquidos) e diz-me o que preciso de declarar no Anexo G do IRS.'}
+];
+
+
+// ── Plano de Oportunidades (comprar as quedas H2 2026) ──
+var PLANO_OPORTUNIDADES = {
+  spReferencia: 7533,  // S&P 500 pico de referência (actualizar manualmente)
+  niveis: [
+    {nivel:1, sp:7150, queda:'-5%',  tranche:500, plano:'VWCE €500', cor:'#fbbf24'},
+    {nivel:2, sp:6860, queda:'-10%', tranche:700, plano:'VWCE €400 + XDWH €300 (abrir Saúde)', cor:'#fb923c'},
+    {nivel:3, sp:6480, queda:'-15%', tranche:800, plano:'VWCE €500 + SEC0/XDWT €300', cor:'#f87171'},
+  ],
+  municaoTotal: 2000
+};
+
+
+// ── Tickers alternativos (mesma ISIN, bolsas diferentes) ────
+var TICKER_ALIAS = {
+  'VWRA':'VWCE','VWRP':'VWCE','VWRL':'VWCE',
+  'SXR8':'CSPX','CSP1':'CSPX',
+  'SXRV':'CNDX','CNX1':'CNDX',
+  'SWDA':'IWDA','EUNL':'IWDA',
+  'SEMI':'SEC0',
+  'VAGP':'VAGE','VAGX':'VAGE',
+  'EMIM':'EIMI','IS3N':'EIMI',
+  'XMEM':'XMME','IE00BTJRMP35':'XMME'
+};
+
+
+// ── Dados P2P Scramble (relatório 18 Jul 2026) ──
+var SCRAMBLE = {
+  depositos: 1350.00,
+  capitalCreditos: 1323.61,   // ronda Agosto 2026
+  cashParado: 61.87,          // 11 Set 2026
+  valorConta: 1385.48,
+  jurosRecebidos: 13.66,
+  bonus: 20.28,
+  dataRelatorio: '2026-09-11'
+};
+// ── Dividendos Freedom24 recebidos por ação (bruto USD, desde 2024) ──
+var DIV_F24 = {
+  'O': 30.03, 'VZ': 16.50, 'PEP': 9.88, 'MO': 8.32, 'MAIN': 5.82,
+  totalBruto: 89.85, retencao: 13.42, totalLiquido: 76.43,
+  dataRelatorio: '2026-09-11'
+};
+
+
 // ── Mapa de sobreposições entre ETFs ────────────────────────
 var ETF_OVERLAPS={'VWCE':['CSPX','ISPY','EQAC','SSLN','IWDP'],'CSPX':['VWCE','ISPY','QDVE','SSLN'],'XDWT':['QDVE','SEC0'],'SEC0':['XDWT','SMH'],'SMH':['SEC0','XDWT'],'JEDI':['STAR'],'STAR':['JEDI'],'C50':['VWCE'],'XDW0':['NUKL'],'WGLD':[]};
 function detectarSobreposicao(ticker){var myT=carteira.map(function(e){return e.ticker;});var ov=ETF_OVERLAPS[ticker]||[];var f=[];ov.forEach(function(o){if(myT.indexOf(o)!==-1)f.push(o);});return {jaTempos:myT.indexOf(ticker)!==-1,sobreposicoes:f};}
@@ -921,8 +1024,27 @@ function showSection(id, btn) {
 // ═══════════════════════════════════════════════════════════════
 // RENDER ALL
 // ═══════════════════════════════════════════════════════════════
+
+function renderPlanoOportunidades(){
+  var el = document.getElementById('planoOportunidades');
+  if(!el || typeof PLANO_OPORTUNIDADES === 'undefined') return;
+  var spAtualEl = document.getElementById('spAtualInput');
+  var spAtual = spAtualEl ? parseFloat(spAtualEl.value) : PLANO_OPORTUNIDADES.spReferencia;
+  el.innerHTML = PLANO_OPORTUNIDADES.niveis.map(function(n){
+    var disparado = spAtual <= n.sp;
+    var estado = disparado
+      ? '<span style="color:var(--green);font-weight:700">✓ ATINGIDO — investir agora</span>'
+      : '<span style="color:var(--silver)">aguarda ' + n.sp + '</span>';
+    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:8px;background:' +
+      (disparado?'rgba(52,211,153,.12)':'var(--dark)') + ';border-left:3px solid ' + n.cor + '">' +
+      '<div><strong style="color:' + n.cor + '">Nível ' + n.nivel + '</strong> · S&P ' + n.sp + ' (' + n.queda + ')' +
+      '<div style="font-size:11px;color:var(--silver);margin-top:2px">€' + n.tranche + ' → ' + n.plano + '</div></div>' +
+      '<div style="text-align:right;font-size:11px">' + estado + '</div></div>';
+  }).join('');
+}
+
 function renderAll() {
-  var fns = [renderKPIs, renderTopTable, renderBiblioteca, renderCarteira,
+  var fns = [renderKPIs, renderPlanoOportunidades, renderTopTable, renderBiblioteca, renderCarteira,
              renderFIRE, renderRejeitados, renderArquivo, renderCharts];
   fns.forEach(function(fn){
     try{ fn(); }catch(e){ console.warn('renderAll erro em '+fn.name+':', e); }
@@ -972,13 +1094,44 @@ function renderKPIs() {
 // ═══════════════════════════════════════════════════════════════
 // PESQUISA ETF
 // ═══════════════════════════════════════════════════════════════
-function searchETF(val) {
+
+// Wrapper: garante SEMPRE uma resposta visível, mesmo com erro interno
+function searchETF(val){
+  var res = document.getElementById('searchResult');
+  try {
+    searchETFCore(val);
+  } catch(err) {
+    console.error('searchETF:', err);
+    if(res){
+      var tk = (val||'').trim().toUpperCase();
+      res.innerHTML = '<span class="result-badge badge-na">⚠ Erro ao pesquisar ' + tk + '</span>' +
+        '<div style="margin-top:6px;font-size:11px;color:var(--silver)">' + (err && err.message ? err.message : '') + '</div>';
+      res.classList.add('show');
+    }
+  }
+}
+
+function searchStock(){
+  try { searchStockCore(); }
+  catch(err){
+    console.error('searchStock:', err);
+    var r = document.getElementById('searchStockResult');
+    if(r){
+      r.innerHTML = '<span class="result-badge badge-na">⚠ Erro ao pesquisar</span>';
+      r.classList.add('show');
+    }
+  }
+}
+
+function searchETFCore(val) {
   const tk = (val||'').trim().toUpperCase();
   const res = document.getElementById('searchResult');
   if(!res) return;
   if (!tk) { res.classList.remove('show'); return; }
-  const found = ETFS.find(e => e.t === tk || e.n.toLowerCase().includes(tk.toLowerCase()));
-  const rejected = REJEITADOS.find(e => e.t === tk);
+  // Resolver tickers alternativos do mesmo fundo (ex: VWRA → VWCE)
+  var alvo = (typeof TICKER_ALIAS !== 'undefined' && TICKER_ALIAS[tk]) ? TICKER_ALIAS[tk] : tk;
+  const found = ETFS.find(e => e.t === alvo || e.n.toLowerCase().includes(tk.toLowerCase()));
+  const rejected = REJEITADOS.find(e => e.t === alvo || e.t === tk);
   if (found) {
     const price = precos[found.t] ? `€${precos[found.t].toFixed(2)}` : 'A carregar...';
     // Análise de sobreposição
@@ -995,8 +1148,11 @@ function searchETF(val) {
     if(alt && !analise.jaTempos){
       altHTML = '<div style="margin-top:6px;padding:8px 10px;border-radius:6px;background:rgba(0,180,216,.1);border-left:3px solid var(--teal);font-size:12px">💡 <strong>Alternativa a considerar:</strong> ' + alt.t + ' (Score: ' + alt.ai + ', TER: ' + alt.ter + '%)</div>';
     }
+    var _L = moedaLinha(found.t);
+    var moedaHTML = (_L.m==='USD') ? '<div style="margin-top:8px;padding:8px 10px;border-radius:6px;background:rgba(251,191,36,.12);border-left:3px solid var(--amber);font-size:12px">💱 <strong>Linha em USD</strong> — a XTB converte EUR→USD (~0,5% de comissão).' + (_L.alt ? ' Alternativa: <strong>'+_L.alt+'</strong>.' : '') + '</div>' : '';
+    var aliasHTML = (alvo !== tk) ? '<div style="margin-top:8px;padding:8px 10px;border-radius:6px;background:rgba(45,212,167,.12);border-left:3px solid var(--teal);font-size:12px">ℹ️ <strong>' + tk + '</strong> é o mesmo fundo que <strong>' + alvo + '</strong> (mesma ISIN, bolsa/moeda diferente).</div>' : '';
     res.innerHTML = `
-      <span class="result-badge badge-ok">✅ ENCONTRADO na Biblioteca ETFs</span>
+      <span class="result-badge badge-ok">✅ ENCONTRADO na Biblioteca ETFs</span>${aliasHTML}${moedaHTML}
       ${overlapHTML}${altHTML}
       <div class="result-grid">
         <div class="result-item"><div class="result-item-label">Ticker</div><div class="result-item-value"><span class="ticker-badge">${found.t}</span></div></div>
@@ -1008,6 +1164,7 @@ function searchETF(val) {
         <div class="result-item"><div class="result-item-label">Ret. 12M</div><div class="result-item-value" style="color:${found.r12>=0?'var(--green)':'var(--red)'}">${found.r12>=0?'+':''}${found.r12}%</div></div>
         <div class="result-item"><div class="result-item-label">Preço Actual</div><div class="result-item-value" style="color:var(--teal)">${price}</div></div>
         <div class="result-item"><div class="result-item-label">Replicação</div><div class="result-item-value">${found.rep}</div></div>
+        <div class="result-item"><div class="result-item-label">Moeda de cotação</div><div class="result-item-value" style="color:${moedaLinha(found.t).m==='EUR'?'var(--green)':(moedaLinha(found.t).m==='USD'?'var(--amber)':'var(--silver)')}">${moedaLinha(found.t).m} · ${moedaLinha(found.t).b}</div></div>
         <div class="result-item"><div class="result-item-label">Perfil</div><div class="result-item-value">${found.perfil}</div></div>
       </div>
       <br><a class="result-link" href="${found.url}" target="_blank">🔗 Ver no justETF</a>`;
@@ -1023,10 +1180,10 @@ function searchETF(val) {
       </div>`;
     res.classList.add('show');
   } else {
-    res.innerHTML = `<span class="result-badge badge-na">❓ ETF ainda não analisado — a pesquisar dados...</span>`;
+    res.innerHTML = '<span class="result-badge badge-na">❓ ' + tk + ' não está na Biblioteca</span>' +
+      '<div style="margin-top:8px;font-size:12px;color:var(--silver)">Consulta os dados oficiais e pede para o adicionar:</div>' +
+      '<br><a class="result-link" href="https://www.justetf.com/en/search.html?query=' + encodeURIComponent(tk) + '" target="_blank">🔗 Procurar ' + tk + ' no justETF</a>';
     res.classList.add('show');
-    // Auto-adicionar à biblioteca via Claude API
-    addToLibraryAuto(tk, 'etf');
   }
 }
 
@@ -1117,6 +1274,7 @@ function renderBiblioteca() {
       <td>${sentBadge(e.sent)}</td>
       <td style="font-size:11px">${e.risco}</td>
       <td style="font-size:11px">${e.rep}</td>
+      <td style="font-size:11px">${(function(){var L=moedaLinha(e.t);var cor=L.m==='EUR'?'var(--green)':(L.m==='USD'?'var(--amber)':'var(--silver)');return '<span style="color:'+cor+';font-weight:700" title="'+L.b+(L.alt?' · alt: '+L.alt:'')+'">'+L.m+'</span>';})()}</td>
       <td style="font-size:11px">${e.perfil}</td>
       <td style="color:${invested>0?'var(--green)':'var(--silver)'}">${invested>0?'€'+Math.round(invested):'—'}</td>
       <td><a class="result-link" href="${e.url}" target="_blank">🔗 Ver</a></td>
@@ -1439,14 +1597,30 @@ try{ var _a=localStorage.getItem('fireArquivo'); if(_a) arquivo=JSON.parse(_a); 
 // Pré-carregar vendas arquivadas se vazio
 if(arquivo.length===0){
   arquivo=[
-    {id:9001,ticker:'XAIX',nome:'Xtrackers AI & Big Data UCITS ETF',perfil:'Temáticos',
-     dataCompra:'2025-01-01',dataVenda:'2026-06-09',qtd:1,precoCompra:98,precoVenda:101.28,
-     valorInvest:98,valorVenda:101.28,lucroBruto:3.28,irs:0.92,lucroLiq:2.36,
-     motivo:'Sobreposição 65-70% com XDWT — vendido e consolidado em XDWT'},
-    {id:9002,ticker:'VVSM',nome:'VanEck Semiconductor Xetra',perfil:'Temáticos',
-     dataCompra:'2025-01-01',dataVenda:'2026-06-09',qtd:1,precoCompra:18.50,precoVenda:50.42,
-     valorInvest:18.50,valorVenda:50.42,lucroBruto:31.92,irs:8.94,lucroLiq:22.98,
-     motivo:'Duplicado exacto do SMH (mesmo ISIN IE00BMW3QW58) — vendido'},
+    {id:9001,ticker:'VVSM',nome:'VanEck Semiconductor',perfil:'Temáticos',
+     dataCompra:'2024-01-29',dataVenda:'2026-06-09',qtd:3.4813,precoCompra:33.74,precoVenda:95.85,
+     valorInvest:117.47,valorVenda:333.68,lucroBruto:216.21,irs:60.54,lucroLiq:155.67,
+     motivo:'Duplicado do SMH — 6 lotes de 2024 vendidos'},
+    {id:9002,ticker:'SXR8',nome:'iShares Core S&P 500 (Xetra)',perfil:'Crescimento',
+     dataCompra:'2024-01-31',dataVenda:'2026-06-04',qtd:0.3346,precoCompra:493.31,precoVenda:699.16,
+     valorInvest:165.06,valorVenda:233.94,lucroBruto:68.88,irs:19.29,lucroLiq:49.59,
+     motivo:'Consolidado no CSPX — 3 lotes'},
+    {id:9003,ticker:'XAIX',nome:'Xtrackers AI & Big Data',perfil:'Temáticos',
+     dataCompra:'2026-05-25',dataVenda:'2026-06-09',qtd:0.4894,precoCompra:200.25,precoVenda:205.10,
+     valorInvest:98.00,valorVenda:100.38,lucroBruto:2.38,irs:0.67,lucroLiq:1.71,
+     motivo:'Sobreposição 65-70% com XDWT'},
+    {id:9004,ticker:'XDWT',nome:'Xtrackers MSCI World InfoTech (parcial)',perfil:'Temáticos',
+     dataCompra:'2024-01-29',dataVenda:'2026-06-04',qtd:0.2324,precoCompra:70.06,precoVenda:127.04,
+     valorInvest:16.28,valorVenda:29.52,lucroBruto:13.24,irs:3.71,lucroLiq:9.53,
+     motivo:'Rebalanceamento Investment Plan'},
+    {id:9005,ticker:'VBTC',nome:'VanEck Bitcoin ETN',perfil:'Alternativa',
+     dataCompra:'2025-05-22',dataVenda:'2026-06-04',qtd:5,precoCompra:52.005,precoVenda:28.998,
+     valorInvest:260.03,valorVenda:144.99,lucroBruto:-115.04,irs:0,lucroLiq:-115.04,
+     motivo:'Corte de perdas — menos-valia dedutível'},
+    {id:9006,ticker:'XDW0',nome:'Xtrackers MSCI World Energy (2024)',perfil:'Agressivo',
+     dataCompra:'2024-01-31',dataVenda:'2024-02-06',qtd:1.1522,precoCompra:43.29,precoVenda:42.68,
+     valorInvest:49.89,valorVenda:49.17,lucroBruto:-0.72,irs:0,lucroLiq:-0.72,
+     motivo:'Rebalanceamento do plano em 2024'},
   ];
   try{localStorage.setItem('fireArquivo',JSON.stringify(arquivo));}catch(e){}
 }
@@ -2032,14 +2206,14 @@ function renderTopStocks(){
   }).join('');
 }
 
-function searchStock(){
+function searchStockCore(){
   var q=(document.getElementById('searchStockInput')&&document.getElementById('searchStockInput').value||'').toLowerCase();
   var res=document.getElementById('searchStockResult');
   if(!res)return;
-  if(!q){res.innerHTML='';return;}
+  if(!q){res.innerHTML='';res.classList.remove('show');return;}
   var allS=STOCKS_DB.concat(typeof STOCKS_LIBRARY!=='undefined'?STOCKS_LIBRARY:[]);
   var found=allS.filter(function(s){return (s.ticker+s.nome+s.setor).toLowerCase().indexOf(q)>=0;});
-  if(!found.length){res.innerHTML='<div style="padding:8px;color:var(--silver);font-size:12px">Nenhuma ação encontrada</div>';return;}
+  if(!found.length){res.innerHTML='<span class="result-badge badge-na">❓ '+q.toUpperCase()+' não existe na Biblioteca de Ações</span>'+'<br><a class="result-link" href="https://finance.yahoo.com/quote/'+encodeURIComponent(q.toUpperCase())+'" target="_blank">🔗 Ver no Yahoo Finance</a>';res.classList.add('show');return;}
   res.innerHTML=found.map(function(s){
     return '<div class="result-item" style="border-left:3px solid '+s.cor+'">'+
       '<div style="display:flex;justify-content:space-between;align-items:center">'+
@@ -2054,6 +2228,7 @@ function searchStock(){
       '</div>'+
     '</div>';
   }).join('');
+  res.classList.add('show');
 }
 
 function filterStockBib(){
@@ -2261,7 +2436,51 @@ function calcDivMensal(s, mes){
 }
 
 // Render calendário principal
+
+function copiarPergunta(i){
+  if(typeof MACRO_EVENTOS === 'undefined' || !MACRO_EVENTOS[i]) return;
+  var txt = MACRO_EVENTOS[i].pergunta;
+  var done = function(){
+    var b = document.getElementById('btnCopy'+i);
+    if(b){ var o = b.textContent; b.textContent = '✓ Copiado'; setTimeout(function(){ b.textContent = o; }, 1800); }
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(function(){ prompt('Copia a pergunta:', txt); });
+  } else {
+    prompt('Copia a pergunta:', txt);
+  }
+}
+
+function renderMacroLembretes(){
+  var el = document.getElementById('macroLembretes');
+  if(!el || typeof MACRO_EVENTOS === 'undefined') return;
+  var hoje = new Date(); hoje.setHours(0,0,0,0);
+  var cores = {FED:'#f87171', CPI:'#fbbf24', Emprego:'#38bdf8', Fiscal:'#a78bfa'};
+  el.innerHTML = MACRO_EVENTOS.map(function(ev, i){
+    var d = new Date(ev.data);
+    var dias = Math.round((d - hoje)/86400000);
+    var passou = dias < 0;
+    var proximo = dias >= 0 && dias <= 14;
+    var cor = cores[ev.tipo] || 'var(--teal)';
+    var badge = passou ? '<span style="color:var(--silver);font-size:10px">passou</span>'
+      : (proximo ? '<span style="color:var(--amber);font-weight:700;font-size:10px">em ' + dias + ' dias</span>'
+                 : '<span style="color:var(--silver);font-size:10px">em ' + dias + ' dias</span>');
+    var dataFmt = d.toLocaleDateString('pt-PT', {day:'2-digit', month:'short'});
+    return '<div style="padding:10px 12px;border-radius:8px;background:' + (proximo?'rgba(251,191,36,.10)':'var(--dark)') +
+      ';border-left:3px solid ' + cor + ';opacity:' + (passou?'.5':'1') + '">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">' +
+        '<div><strong style="color:' + cor + ';font-size:12px">' + dataFmt + ' · ' + ev.tipo + '</strong>' +
+        '<div style="font-size:12px;color:var(--white);margin-top:2px">' + ev.titulo + '</div></div>' +
+        '<div style="text-align:right;white-space:nowrap">' + badge +
+        '<br><button id="btnCopy' + i + '" onclick="copiarPergunta(' + i + ')" style="margin-top:4px;padding:3px 8px;border-radius:5px;border:none;background:var(--teal);color:var(--navy);cursor:pointer;font-size:10px;font-weight:700">📋 Copiar</button></div>' +
+      '</div>' +
+      '<div style="font-size:11px;color:var(--silver);margin-top:6px;font-style:italic">"' + ev.pergunta + '"</div>' +
+    '</div>';
+  }).join('');
+}
+
 function renderCalendario(){
+  renderMacroLembretes();
   var grid = document.getElementById('calMonthGrid');
   if(!grid) return;
 
@@ -2540,7 +2759,7 @@ async function refreshTopETFs() {
 
   const myTickers = carteira.map(c=>c.ticker).join(', ');
   const prompt = `Analisa os top 10 ETFs UCITS mais recomendados actualmente em Junho 2026 para investidores europeus com estratégia FIRE de longo prazo. Considera performance recente, análises do justETF, Yahoo Finance e principais analistas. O investidor já tem em carteira: ${myTickers}. Responde APENAS em JSON válido, sem texto adicional, neste formato exacto:
-[{"ticker":"VWCE","nome":"Vanguard FTSE All-World","setor":"Global","score":95,"ret12m":12.5,"perspetiva":"Positiva","risco":"Moderado","url":"https://www.justetf.com/en/etf-profile.html?isin=IE00B3RBWM25","emCarteira":true},...]
+[{"ticker":"VWCE","nome":"Vanguard FTSE All-World","setor":"Global","score":95,"ret12m":12.5,"perspetiva":"Positiva","risco":"Moderado","url":"https://www.justetf.com/en/etf-profile.html?isin=IE00BK5BQT80","emCarteira":true},...]
 Inclui exactamente 10 ETFs. Para emCarteira usa true se o ticker estiver em: ${myTickers}`;
 
   const data = await callClaude(prompt);
@@ -2645,25 +2864,35 @@ function initCalendario(){
   // 2. Pre-carregar carteira ETFs — dados reais XTB Jun 2026
   // Só sobrescreve localStorage quando CARTEIRA_FILE_VERSION muda (nova versão do ficheiro).
   // Assim, compras adicionadas no formulário e dados importados sobrevivem ao refresh.
-  var CARTEIRA_FILE_VERSION = 6; // ← incrementar sempre que editares a lista abaixo no ficheiro
+  var CARTEIRA_FILE_VERSION = 8; // ← incrementar sempre que editares a lista abaixo no ficheiro
   var versaoGuardada = parseInt(localStorage.getItem('fireCarteiraVersion')||'0');
   if(versaoGuardada !== CARTEIRA_FILE_VERSION || !carteira || carteira.length === 0){
   carteira=[
-    // ── VWCE — 3 lotes (original + 2 compras de 16 Jun) ──
-    {ticker:'VWCE',nome:'Vanguard FTSE All-World',setor:'Ações Globais',perfil:'Crescimento',data:'2025-01-01',qtd:36.1307,precoCompra:163.22,notas:'Plano XTB — núcleo',id:1001},
-    {ticker:'VWCE',nome:'Vanguard FTSE All-World',setor:'Ações Globais',perfil:'Crescimento',data:'2026-06-16',qtd:5.5366,precoCompra:164.25,notas:'Reforço 16 Jun — compra principal €909.44',id:1010},
-    {ticker:'VWCE',nome:'Vanguard FTSE All-World',setor:'Ações Globais',perfil:'Crescimento',data:'2026-06-16',qtd:0.9904,precoCompra:164.14,notas:'Reforço 16 Jun — redirec. WGLD €162.56',id:1011},
-    {ticker:'CSPX',nome:'iShares Core S&P 500',setor:'Ações EUA',perfil:'Crescimento',data:'2025-01-01',qtd:3.1989,precoCompra:814.94,moeda:'USD',notas:'Plano XTB — manter, parar DCA · cotado em USD (LSE), convertido p/ EUR',id:1002},
-    {ticker:'JEDI',nome:'VanEck Space Innovators',setor:'Espaço',perfil:'Temáticos',data:'2025-01-01',qtd:6.3308,precoCompra:111.93,notas:'Plano XTB — 2 compras consolidadas',id:1003},
-    // ── WGLD — valor nominal total €1156.62 (3 unidades) ──
-    {ticker:'WGLD',nome:'WisdomTree Core Physical Gold',setor:'Ouro Físico',perfil:'Moderado',data:'2025-01-01',qtd:3,precoCompra:385.54,notas:'Plano XTB · valor nominal €1156.62 (inclui reforço parcial 16 Jun)',id:1004},
-    // ── NUKL — valor real 16 Jun €415.37 (8.3804 un a €49.565) ──
-    {ticker:'NUKL',nome:'VanEck Uranium & Nuclear',setor:'Energia Nuclear',perfil:'Temáticos',data:'2026-06-16',qtd:8.3804,precoCompra:49.565,notas:'Plano XTB — reforço 16 Jun €415.37',id:1005},
-    {ticker:'C50',nome:'Amundi Core EURO STOXX 50',setor:'Ações Europa',perfil:'Crescimento',data:'2025-01-01',qtd:1,precoCompra:152.68,notas:'Transações XTB — qtd aproximada',id:1006},
-    {ticker:'SEC0',nome:'iShares MSCI Global Semiconductors',setor:'Semicondutores',perfil:'Agressivo',data:'2025-01-01',qtd:1,precoCompra:151.25,notas:'Transações XTB — qtd aproximada',id:1007},
-    // ── XDW0 — valor real 16 Jun €389.19 (6.5542 un a €59.381) ──
-    {ticker:'XDW0',nome:'Xtrackers MSCI World Energy',setor:'Energia Global',perfil:'Agressivo',data:'2026-06-16',qtd:6.5542,precoCompra:59.381,notas:'Transações XTB — reforço 16 Jun €389.19',id:1008},
-    {ticker:'XDWT',nome:'Xtrackers MSCI World InfoTech',setor:'Tech Mundial',perfil:'Temáticos',data:'2025-01-01',qtd:1,precoCompra:77.00,notas:'Transações XTB — qtd aproximada',id:1009},
+    // ── Dados reais XTB — relatório Open Positions 11 Set 2026 ──
+    // Conta 51946604 (núcleo)
+    {ticker:'VWCE',nome:'Vanguard FTSE All-World',setor:'Ações Globais',perfil:'Crescimento',data:'2026-05-29',qtd:33.0395,precoCompra:163.46,notas:'Núcleo — €5.400,64',id:1001},
+    {ticker:'VWCE',nome:'Vanguard FTSE All-World',setor:'Ações Globais',perfil:'Crescimento',data:'2026-06-08',qtd:3.0912,precoCompra:160.68,notas:'Reforço €496,69',id:1010},
+    {ticker:'VWCE',nome:'Vanguard FTSE All-World',setor:'Ações Globais',perfil:'Crescimento',data:'2026-06-15',qtd:5.537,precoCompra:164.25,notas:'Reforço €909,44',id:1011},
+    {ticker:'VWCE',nome:'Vanguard FTSE All-World',setor:'Ações Globais',perfil:'Crescimento',data:'2026-06-15',qtd:0.9904,precoCompra:164.14,notas:'Reforço €162,56 (redirec. WGLD)',id:1012},
+    {ticker:'CSPX',nome:'iShares Core S&P 500',setor:'Ações EUA',perfil:'Crescimento',data:'2026-05-29',qtd:3.1989,precoCompra:814.95,moeda:'USD',notas:'CSPX.UK cotado em USD · valor €2.269,62',id:1002},
+    {ticker:'WGLD',nome:'WisdomTree Core Physical Gold',setor:'Ouro Físico',perfil:'Moderado',data:'2026-05-29',qtd:3,precoCompra:385.54,notas:'€1.156,62',id:1004},
+    {ticker:'WGLD',nome:'WisdomTree Core Physical Gold',setor:'Ouro Físico',perfil:'Moderado',data:'2026-06-15',qtd:1,precoCompra:369.06,notas:'Reforço €369,06',id:1014},
+    // Conta 1169612 (My Trades + Investment Plans)
+    {ticker:'JEDI',nome:'VanEck Space Innovators',setor:'Espaço',perfil:'Temáticos',data:'2026-05-25',qtd:1.8594,precoCompra:110.887,notas:'€206,18',id:1003},
+    {ticker:'JEDI',nome:'VanEck Space Innovators',setor:'Espaço',perfil:'Temáticos',data:'2026-05-26',qtd:4.4714,precoCompra:112.462,notas:'€502,86',id:1013},
+    {ticker:'XDW0',nome:'Xtrackers MSCI World Energy',setor:'Energia Global',perfil:'Agressivo',data:'2024-01-29',qtd:0.3845,precoCompra:43.055,notas:'Investment Plan — lote 2024',id:1020},
+    {ticker:'XDW0',nome:'Xtrackers MSCI World Energy',setor:'Energia Global',perfil:'Agressivo',data:'2026-06-04',qtd:0.455,precoCompra:61.68,notas:'Investment Plan €28,06',id:1008},
+    {ticker:'XDW0',nome:'Xtrackers MSCI World Energy',setor:'Energia Global',perfil:'Agressivo',data:'2026-06-09',qtd:0.8128,precoCompra:60.71,notas:'Investment Plan €49,35',id:1018},
+    {ticker:'XDW0',nome:'Xtrackers MSCI World Energy',setor:'Energia Global',perfil:'Agressivo',data:'2026-06-15',qtd:6.5541,precoCompra:59.381,notas:'Reforço €389,19',id:1019},
+    {ticker:'XDWT',nome:'Xtrackers MSCI World InfoTech',setor:'Tech Mundial',perfil:'Temáticos',data:'2024-01-29',qtd:0.3523,precoCompra:70.06,notas:'Investment Plan — lote 2024 (+79%)',id:1021},
+    {ticker:'XDWT',nome:'Xtrackers MSCI World InfoTech',setor:'Tech Mundial',perfil:'Temáticos',data:'2026-06-04',qtd:0.2861,precoCompra:127.30,notas:'Investment Plan €36,42',id:1009},
+    {ticker:'C50',nome:'Amundi Core EURO STOXX 50',setor:'Ações Europa',perfil:'Crescimento',data:'2026-05-25',qtd:0.5982,precoCompra:163.82,notas:'Investment Plan €98,00',id:1006},
+    {ticker:'C50',nome:'Amundi Core EURO STOXX 50',setor:'Ações Europa',perfil:'Crescimento',data:'2026-06-09',qtd:0.3321,precoCompra:164.50,notas:'Investment Plan €54,63',id:1016},
+    {ticker:'SEC0',nome:'iShares MSCI Global Semiconductors',setor:'Semicondutores',perfil:'Agressivo',data:'2026-05-25',qtd:5.546,precoCompra:17.672,notas:'Investment Plan €98,01',id:1007},
+    {ticker:'SEC0',nome:'iShares MSCI Global Semiconductors',setor:'Semicondutores',perfil:'Agressivo',data:'2026-06-09',qtd:2.7374,precoCompra:18.476,notas:'Investment Plan €50,57',id:1017},
+    // Conta 1224939
+    {ticker:'NUKL',nome:'VanEck Uranium & Nuclear',setor:'Energia Nuclear',perfil:'Temáticos',data:'2026-06-09',qtd:5.902,precoCompra:47.70,notas:'Investment Plan €281,53',id:1005},
+    {ticker:'NUKL',nome:'VanEck Uranium & Nuclear',setor:'Energia Nuclear',perfil:'Temáticos',data:'2026-06-15',qtd:8.3804,precoCompra:49.565,notas:'Reforço €415,37',id:1015},
   ];
   try{
     localStorage.setItem('fireCarteira',JSON.stringify(carteira));
@@ -2725,6 +2954,13 @@ function initCalendario(){
 <div id="calendario" class="section">
   <div class="section-title">📅 Calendário de Dividendos</div>
   <div class="alert alert-info">💡 Calendário unificado — ações + ETFs distributivos. Datas de pagamento baseadas no historial real de cada empresa (verificadas Jun 2026). O preço actualiza automaticamente via Yahoo Finance. ETFs Acc mostrados como informativos (reinvestimento automático).</div>
+
+  <!-- Lembretes macro -->
+  <div style="background:var(--card-solid);border-radius:16px;padding:18px;margin-bottom:18px;box-shadow:var(--shadow);border-left:4px solid var(--teal)">
+    <div style="font-size:14px;font-weight:700;color:var(--teal);margin-bottom:4px">🔔 Lembretes Macro — perguntar ao Claude</div>
+    <div style="font-size:11px;color:var(--silver);margin-bottom:12px">Nestas datas, copia a pergunta e cola numa conversa com o Claude para teres uma leitura actualizada.</div>
+    <div id="macroLembretes" style="display:grid;gap:8px"></div>
+  </div>
 
   <!-- KPIs anuais -->
   <div class="kpi-grid" id="calKpis"></div>
