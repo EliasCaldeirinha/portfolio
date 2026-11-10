@@ -1,21 +1,17 @@
 {
-  "name": "FIRE Dashboard EC",
-  "short_name": "FIRE EC",
-  "start_url": "/portfolio/",
-  "scope": "/portfolio/",
+  "name": "FIRE Dashboard",
+  "short_name": "FIRE",
+  "description": "Painel de gestao da carteira FIRE",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0e1f18",
-  "theme_color": "#0e1f18",
+  "orientation": "portrait-primary",
+  "background_color": "#07150F",
+  "theme_color": "#0B1F17",
   "icons": [
-    {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQyIiBmaWxsPSIjMGUxZjE4Ii8+PGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iNzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJkZDRhNyIgc3Ryb2tlLXdpZHRoPSI2Ii8+PHRleHQgeD0iOTYiIHk9IjExOCIgZm9udC1mYW1pbHk9IlNlZ29lIFVJLEFyaWFsIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMmRkNGE3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5FQzwvdGV4dD48dGV4dCB4PSI5NiIgeT0iMTUyIiBmb250LWZhbWlseT0iU2Vnb2UgVUksQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiM5ZGI4YWMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZJUkU8L3RleHQ+PC9zdmc+",
-      "sizes": "192x192",
-      "type": "image/svg+xml"
-    },
-    {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQyIiBmaWxsPSIjMGUxZjE4Ii8+PGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iNzQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJkZDRhNyIgc3Ryb2tlLXdpZHRoPSI2Ii8+PHRleHQgeD0iOTYiIHk9IjExOCIgZm9udC1mYW1pbHk9IlNlZ29lIFVJLEFyaWFsIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iODAwIiBmaWxsPSIjMmRkNGE3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5FQzwvdGV4dD48dGV4dCB4PSI5NiIgeT0iMTUyIiBmb250LWZhbWlseT0iU2Vnb2UgVUksQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiM5ZGI4YWMiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkZJUkU8L3RleHQ+PC9zdmc+",
-      "sizes": "512x512",
-      "type": "image/svg+xml"
-    }
+    { "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%2307150F'/%3E%3Ctext x='96' y='126' font-family='Arial' font-size='88' font-weight='bold' fill='%232DD4A7' text-anchor='middle'%3EEC%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%2307150F'/%3E%3Ctext x='256' y='336' font-family='Arial' font-size='234' font-weight='bold' fill='%232DD4A7' text-anchor='middle'%3EEC%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
   ]
 }
